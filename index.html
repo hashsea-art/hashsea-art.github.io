@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'none'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; worker-src 'none'; media-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Harsh's Film Diary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+    crossorigin="anonymous"
+    referrerpolicy="strict-origin-when-cross-origin"
+  />
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./vendor/chart.umd.min.js" defer></script>
+  <script src="./data/movies-data.js" defer></script>
+  <script src="./script.js" defer></script>
+</head>
+<body>
+
+<header class="masthead" id="top">
+  <div class="masthead-inner">
+    <h1 class="masthead-title">Harsh's Film Diary</h1>
+  </div>
+</header>
+
+<main class="dashboard">
+  <section class="load-alert" id="loadAlert" hidden aria-live="polite">
+    <p class="load-alert-title">Using fallback sample data</p>
+    <p class="load-alert-text" id="loadAlertText"></p>
+  </section>
+
+  <section class="section" aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
+    <div class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-eyebrow">Films watched</span>
+        <span class="stat-number" id="statTotal">127</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-eyebrow">Films rated</span>
+        <span class="stat-number" id="statRated">94</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-eyebrow">Films scored</span>
+        <span class="stat-number" id="statScored">88</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-eyebrow">Avg score</span>
+        <span class="stat-number" id="statAvg">81.4</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-eyebrow">Films reviewed</span>
+        <span class="stat-number" id="statReviewed">32</span>
+      </article>
+    </div>
+  </section>
+
+  <div class="section-divider"><span>Charts</span></div>
+
+  <section class="section" aria-labelledby="charts-heading">
+    <h2 id="charts-heading" class="visually-hidden">Charts</h2>
+    <div class="charts-grid">
+      <article class="chart-card">
+        <header class="chart-header">
+          <div class="chart-header-row">
+            <h3 class="chart-title" id="scoreChartTitle">Score Distribution</h3>
+            <button type="button" class="chart-back-btn" id="scoreChartBack" hidden>Back</button>
+          </div>
+          <p class="chart-desc" id="scoreChartDesc">Counts in bins of 10 from 1&ndash;100</p>
+        </header>
+        <div class="chart-body"><canvas id="scoreChart" aria-label="Score distribution histogram"></canvas></div>
+      </article>
+      <article class="chart-card">
+        <header class="chart-header">
+          <h3 class="chart-title">Star Rating Distribution</h3>
+          <p class="chart-desc">Films per star rating (&frac12;&ndash;5 &starf;)</p>
+        </header>
+        <div class="chart-body"><canvas id="ratingChart" aria-label="Rating distribution bar chart"></canvas></div>
+      </article>
+    </div>
+    <article class="chart-card chart-card-wide">
+      <header class="chart-header">
+        <div class="chart-header-row">
+          <h3 class="chart-title" id="watchPeriodChartTitle">Films by Release Decade</h3>
+          <button type="button" class="chart-back-btn" id="watchPeriodChartBack" hidden>Back</button>
+        </div>
+        <p class="chart-desc" id="watchPeriodChartDesc">Films by release decade. Click a bar to drill down.</p>
+      </header>
+      <div class="chart-body"><canvas id="watchPeriodChart" aria-label="Films by release decade chart"></canvas></div>
+    </article>
+  </section>
+
+  <div class="section-divider"><span>Films</span></div>
+
+  <section class="section" aria-labelledby="films-heading">
+    <h2 id="films-heading" class="visually-hidden">Film list</h2>
+    <div class="search-bar-wrap">
+      <div class="search-input-wrap">
+        <span class="search-icon" aria-hidden="true">&#x2315;</span>
+        <label for="searchInput" class="visually-hidden">Search films</label>
+        <input type="text" id="searchInput" class="search-input" role="searchbox"
+          placeholder="Search by title, year, or score &middot; Press Enter" autocomplete="off" inputmode="search" />
+        <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden>&#x2715;</button>
+      </div>
+      <div class="page-size-wrap">
+        <label for="pageSizeSelect" class="page-size-label">Rows</label>
+        <select id="pageSizeSelect" class="page-size-select" aria-label="Entries per page">
+          <option value="20" selected>20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <span class="search-count" id="searchCount" aria-live="polite"></span>
+    </div>
+    <div class="active-filters" id="activeFilters" hidden>
+      <div class="active-filter" id="activeSearchFilter" hidden>
+        <span class="active-filter-label" id="activeSearchFilterLabel"></span>
+        <button type="button" class="active-filter-clear" id="activeSearchFilterClear" aria-label="Clear search filter">&#x2715;</button>
+      </div>
+      <div class="active-filter" id="activeChartFilter" hidden>
+        <span class="active-filter-label" id="activeChartFilterLabel"></span>
+        <button type="button" class="active-filter-clear" id="activeChartFilterClear" aria-label="Clear active film filter">&#x2715;</button>
+      </div>
+    </div>
+    <p class="table-hint">Tip: Shift-click headers to add sort</p>
+
+    <div class="table-wrap" id="tableWrap">
+      <table class="films-table" id="filmsTable">
+        <thead>
+          <tr>
+            <th scope="col" class="sortable" data-col="movie">Film <span class="sort-ind"></span></th>
+            <th scope="col" class="col-rewatch" aria-label="Rewatch"></th>
+            <th scope="col" class="col-year sortable" data-col="year">Year <span class="sort-ind"></span></th>
+            <th scope="col" class="col-date sortable" data-col="date_watched">Watched <span class="sort-ind"></span></th>
+            <th scope="col" class="col-rating sortable" data-col="rating">Rating <span class="sort-ind"></span></th>
+            <th scope="col" class="col-prev sortable" data-col="previous_score">Old Score <span class="sort-ind"></span></th>
+            <th scope="col" class="col-score sortable" data-col="score">Score <span class="sort-ind"></span></th>
+            <th scope="col" class="col-notes sortable" data-col="review_link">Review <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="table-empty" id="tableEmpty">
+        <p id="tableEmptyMsg" class="table-empty-msg"></p>
+      </div>
+    </div>
+
+    <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+  </section>
+
+</main>
+
+<aside class="detail-panel" id="detailPanel" aria-hidden="true" aria-labelledby="detailTitle">
+  <button type="button" class="detail-close" id="detailClose">
+    <span>Film detail</span>
+    <span class="detail-close-x" aria-hidden="true">&#x2715;</span>
+  </button>
+  <div class="detail-inner">
+    <p class="detail-eyebrow" id="detailYear"></p>
+    <h2 class="detail-title" id="detailTitle"></h2>
+    <div class="detail-block">
+      <h3 class="detail-block-label">Watched</h3>
+      <div class="timeline" id="detailTimeline"></div>
+    </div>
+    <div class="detail-block">
+      <h3 class="detail-block-label">Scores</h3>
+      <div class="score-compare" id="detailScores"></div>
+    </div>
+    <div class="detail-block" id="detailRatingBlock" hidden>
+      <h3 class="detail-block-label">Star rating</h3>
+      <div class="stars" id="detailStars"></div>
+    </div>
+    <div class="detail-block" id="detailNotesBlock" hidden>
+      <h3 class="detail-block-label">Notes / Review</h3>
+      <p class="detail-notes" id="detailNotes"></p>
+      <div class="detail-review-links" id="detailReviewLinks"></div>
+    </div>
+  </div>
+</aside>
+<div class="panel-backdrop" id="panelBackdrop" hidden></div>
+
+</body>
+</html>
+
