@@ -2,14 +2,13 @@
 
 A static personal film diary site built for GitHub Pages.
 
-The site reads diary data from `data/movies.csv`, renders stats and charts in the browser, and falls back to `data/movies-data.js` when local CSV fetching is unavailable. The frontend is split into small ES modules under `src/` for easier maintenance.
+The site reads diary data from `data/movies.csv` and renders stats, charts, filters, and a film table entirely in the browser. The frontend is split into small ES modules under `src/` for easier maintenance.
 
 ## Project Structure
 
 - `index.html`: page shell and security-related meta tags
 - `style.css`: site styles
 - `data/movies.csv`: primary diary data source
-- `data/movies-data.js`: bundled fallback data for environments where CSV fetch is blocked
 - `src/main.js`: app entrypoint
 - `src/data/`: CSV loading, parsing, and normalization
 - `src/ui/`: charts, filters, table, detail panel, heatmap, and other UI modules
@@ -18,7 +17,7 @@ The site reads diary data from `data/movies.csv`, renders stats and charts in th
 
 ## Local Development
 
-Use a local server rather than opening `index.html` with `file://`.
+Use a local server rather than opening `index.html` with `file://`, because the app fetches `data/movies.csv` at runtime.
 
 Recommended:
 
@@ -41,8 +40,7 @@ This project is structured to work as a static site on GitHub Pages:
 ## Data Notes
 
 - Keep `data/movies.csv` as the main editable source.
-- `data/movies-data.js` exists as a fallback for local/browser cases where direct CSV fetch is blocked.
-- `scripts/update-movies-data.ps1` can be used to refresh the bundled fallback data.
+- The site expects `data/movies.csv` to be available through a local server or static host.
 
 ## License
 

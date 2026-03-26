@@ -65,8 +65,21 @@ function updateMovies(movies, alertMessage) {
 }
 
 async function loadData() {
-  const { movies, alertMessage } = await loadMoviesData();
-  updateMovies(movies, alertMessage);
+  try {
+    const { movies, alertMessage } = await loadMoviesData();
+    updateMovies(movies, alertMessage);
+  } catch (error) {
+    console.error("[Harsh's Film Diary]", error);
+    setLoadAlert(
+      'The page could not read data/movies.csv. Run the site through a local server such as Live Server, or check that the CSV exists and matches the expected format.'
+    );
+    state.allMovies = [];
+    state.filtered = [];
+    state.scoreChartDrilldown = null;
+    state.watchPeriodChartDrilldown = null;
+    syncSearchUi();
+    renderDashboard();
+  }
 }
 
 async function init() {
