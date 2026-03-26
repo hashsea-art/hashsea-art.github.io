@@ -2,26 +2,29 @@
 
 A static personal film diary site built for GitHub Pages.
 
-The site reads diary data from `data/movies.csv` and renders stats, charts, filters, and a film table entirely in the browser. The frontend is split into small ES modules under `src/` for easier maintenance.
+The site reads diary data from `data/movies.csv` and renders stats, charts, filters, a watch heatmap, and a film table entirely in the browser. The frontend is organized into small ES modules under `src/` so the project stays manageable as it grows.
 
-## Project Structure
+## Structure
 
-- `index.html`: page shell and security-related meta tags
+- `index.html`: page shell, metadata, and static panel content
 - `style.css`: site styles
-- `data/movies.csv`: primary diary data source
-- `src/main.js`: app entrypoint
-- `src/data/`: CSV loading, parsing, and normalization
-- `src/ui/`: charts, filters, table, detail panel, heatmap, and other UI modules
-- `src/utils/`: shared DOM and formatting helpers
+- `data/movies.csv`: diary data source
 - `vendor/chart.umd.min.js`: Chart.js bundle
+- `src/main.js`: app entrypoint and top-level wiring
+- `src/state.js`: shared app state
+- `src/constants.js`: shared constants and column aliases
+- `src/movies.js`: movie/watch helpers used across the UI
+- `src/data/`: CSV loading, parsing, and normalization
+- `src/ui/`: charts, filters, table, detail panel, heatmap, sorting, stats, and static chrome
+- `src/utils/`: shared DOM and formatting helpers
 
 ## Local Development
 
 Use a local server rather than opening `index.html` with `file://`, because the app fetches `data/movies.csv` at runtime.
 
-Recommended:
+Recommended setup with VS Code:
 
-1. Open the project in VS Code.
+1. Open the project folder in VS Code.
 2. Install the `Live Server` extension.
 3. Right-click `index.html`.
 4. Choose `Open with Live Server`.
@@ -30,17 +33,18 @@ This should open a local URL such as `http://127.0.0.1:5500/`.
 
 ## GitHub Pages
 
-This project is structured to work as a static site on GitHub Pages:
+This project is set up to work as a static GitHub Pages site:
 
-- all assets are referenced with relative paths
-- the app runs entirely in the browser
-- `src/main.js` is loaded as an ES module
-- the diary data is fetched from `data/movies.csv`
+- assets use relative paths
+- the app runs fully in the browser
+- `src/main.js` loads as an ES module
+- diary data is read from `data/movies.csv`
 
-## Data Notes
+## Data
 
-- Keep `data/movies.csv` as the main editable source.
-- The site expects `data/movies.csv` to be available through a local server or static host.
+- Edit `data/movies.csv` as the main source of truth.
+- Keep the CSV available alongside the site when deploying.
+- If the CSV cannot be loaded, the page shows a load warning instead of fallback sample data.
 
 ## License
 
