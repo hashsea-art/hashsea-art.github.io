@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'none'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; worker-src 'none'; media-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+    content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'none'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://www.serializd.com https://www.reddit.com https://www.redditstatic.com; connect-src 'self'; object-src 'none'; worker-src 'none'; media-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
   />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Harsh's Film Diary</title>
@@ -103,22 +103,22 @@
 
             <div class="score-guide-copy">
               <p class="score-guide-text score-guide-lead">
-                The scale expands the usual star ratings into 100 values. Although the scores are numerical,
-                they don't follow strict mathematical rules&mdash;72 is not 7.2 and cannot be floored to
-                7/10 or 3&frac12; stars. The values 71&ndash;80 are just a way to distribute 4-star movies.
+                The scale expands the usual star ratings into 100 values. The range 71&ndash;80 is a way to distribute 4-star movies.
+                Although the scores are numerical, they don't follow strict mathematical rules&mdash;72/100 cannot be floored to
+                7/10 or 3&frac12; stars.
               </p>
               <div class="score-guide-notes">
                 <p class="score-guide-note">
                   <strong>Why aren't star ratings enough?</strong> A movie scored 80 means significantly more
                   to me than one rated 61, but because there aren't enough stars (pigeonhole principle), they
-                  end up with just half a star difference, which I can't endure. Nothing can replace an actual
+                  end up with just half a star difference. I can't endure that. Ultimately, nothing can replace an actual
                   review, but this scale helps me broadly quantify my feelings towards a film.
                 </p>
                 <p class="score-guide-note">
                   <strong>How do I score so precisely?</strong> The scores are estimates and I don't mull over
                   1&ndash;2 points often. Any distinction or preference between films only becomes meaningful
                   when the difference in score is sizeable (3 points). Also, scoring becomes intuitive with
-                  time, especially after 1500+ movies.
+                  time.
                 </p>
               </div>
             </div>
@@ -128,57 +128,67 @@
         <section class="info-panel-content" id="connectPanel" hidden>
           <div class="info-panel-links">
             <a class="info-panel-link" href="https://letterboxd.com/hashsea/" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd: hashsea" title="Letterboxd · hashsea">
-              <span class="info-panel-link-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="8" cy="8" r="8" fill="#40BCF4"/>
-                  <circle cx="24" cy="8" r="8" fill="#00E054"/>
-                  <circle cx="40" cy="8" r="8" fill="#FF8000"/>
-                </svg>
+              <span class="info-panel-link-top">
+                <span class="info-panel-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="26" r="8.5" fill="#40BCF4"/>
+                    <circle cx="26" cy="26" r="8.5" fill="#00E054"/>
+                    <circle cx="40" cy="26" r="8.5" fill="#FF8000"/>
+                  </svg>
+                </span>
+                <span class="info-panel-link-head">
+                  <span class="info-panel-link-name">Letterboxd</span>
+                  <span class="info-panel-link-handle">@hashsea</span>
+                </span>
               </span>
-              <span class="visually-hidden">Letterboxd</span>
+              <span class="info-panel-link-copy">
+                <span class="info-panel-link-note">The main place where I log films, scores, rewatches, and quick reactions.</span>
+              </span>
             </a>
             <a class="info-panel-link" href="mailto:hello@example.com" aria-label="Email: hello@example.com" title="Email · hello@example.com">
-              <span class="info-panel-link-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3.75 6.75h16.5a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                  <path d="m4 7.5 8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+              <span class="info-panel-link-top">
+                <span class="info-panel-link-icon" aria-hidden="true">
+                  <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3.25" y="6" width="21.5" height="16" rx="3.2" stroke="currentColor" stroke-width="1.7"/>
+                    <path d="m5.4 8.15 8.6 6.75 8.6-6.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="info-panel-link-head">
+                  <span class="info-panel-link-name">Email</span>
+                  <span class="info-panel-link-handle">hello@example.com</span>
+                </span>
               </span>
-              <span class="visually-hidden">Email</span>
-            </a>
-            <a class="info-panel-link" href="https://instagram.com/example" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @example" title="Instagram · @example">
-              <span class="info-panel-link-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5" stroke="currentColor" stroke-width="1.6"/>
-                  <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.6"/>
-                  <circle cx="17.35" cy="6.7" r="1.1" fill="currentColor"/>
-                </svg>
+              <span class="info-panel-link-copy">
+                <span class="info-panel-link-note">The easiest way to reach me directly for anything more personal, practical, or long-form.</span>
               </span>
-              <span class="visually-hidden">Instagram</span>
             </a>
             <a class="info-panel-link" href="https://reddit.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Reddit: u/example" title="Reddit · u/example">
-              <span class="info-panel-link-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="18.15" cy="8.35" r="1.45" fill="currentColor"/>
-                  <path d="M9.4 8.4 10.65 5l4.55 1" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M18.1 8.9c1.05.7 1.65 1.7 1.65 2.8 0 2.45-3.5 4.45-7.8 4.45s-7.8-2-7.8-4.45c0-1.08.58-2.05 1.58-2.74" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
-                  <circle cx="9" cy="11.45" r="1" fill="currentColor"/>
-                  <circle cx="14.95" cy="11.45" r="1" fill="currentColor"/>
-                  <path d="M9.15 14.05c.85.62 1.8.9 2.85.9 1.05 0 2.02-.3 2.88-.92" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
-                </svg>
+              <span class="info-panel-link-top">
+                <span class="info-panel-link-icon" aria-hidden="true">
+                  <img src="https://www.reddit.com/favicon.ico" alt="" />
+                </span>
+                <span class="info-panel-link-head">
+                  <span class="info-panel-link-name">Reddit</span>
+                  <span class="info-panel-link-handle">u/example</span>
+                </span>
               </span>
-              <span class="visually-hidden">Reddit</span>
+              <span class="info-panel-link-copy">
+                <span class="info-panel-link-note">Where I occasionally post, comment, and drift into more informal film-adjacent conversation.</span>
+              </span>
             </a>
             <a class="info-panel-link" href="https://www.serializd.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Serializd: example" title="Serializd · example">
-              <span class="info-panel-link-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="4.25" width="18" height="13" rx="3" stroke="currentColor" stroke-width="1.55"/>
-                  <path d="M8.5 20h7" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"/>
-                  <path d="M10 9.1c.6-.45 1.3-.68 2.12-.68 1.38 0 2.28.67 2.28 1.7 0 .78-.47 1.27-1.33 1.62l-.85.34c-.62.25-.9.52-.9.98 0 .13.02.28.06.44" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="11.45" cy="14.95" r=".78" fill="currentColor"/>
-                </svg>
+              <span class="info-panel-link-top">
+                <span class="info-panel-link-icon" aria-hidden="true">
+                  <img src="https://www.serializd.com/favicon.ico" alt="" />
+                </span>
+                <span class="info-panel-link-head">
+                  <span class="info-panel-link-name">Serializd</span>
+                  <span class="info-panel-link-handle">@example</span>
+                </span>
               </span>
-              <span class="visually-hidden">Serializd</span>
+              <span class="info-panel-link-copy">
+                <span class="info-panel-link-note">For TV logging, short reactions, and the occasional note when I am not writing about films.</span>
+              </span>
             </a>
           </div>
         </section>
