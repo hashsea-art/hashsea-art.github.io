@@ -1,0 +1,163 @@
+// Shared app constants: data paths, chart theme values, fallback sample data, and defaults.
+export const CSV_PATH = './data/movies.csv';
+
+export const DEFAULT_PAGE_SIZE = 20;
+export const PAGE_SIZE_OPTIONS = [20, 50, 100];
+export const RATING_STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+export const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+export const CHART_THEME = {
+  tick: '#91a9bc',
+  grid: 'rgba(255, 255, 255, 0.045)',
+  gridBorder: 'rgba(255, 255, 255, 0.1)',
+  tooltipBg: '#151d26',
+  tooltipTitle: '#eef8ff',
+  tooltipBody: '#c9d9e6',
+  fontBody: "'Manrope', Arial, sans-serif",
+  fontMono: "'Space Mono', monospace",
+  scoreGradTop: 'rgba(121, 198, 255, 1)',
+  scoreGradBot: 'rgba(121, 198, 255, 0.48)',
+  scoreBorder: 'rgba(121, 198, 255, 1)',
+  ratingFill: 'rgba(0, 193, 106, 0.96)',
+  ratingBorder: 'rgba(76, 255, 165, 1)',
+  watchGradTop: 'rgba(255, 182, 92, 0.98)',
+  watchGradBot: 'rgba(255, 182, 92, 0.4)',
+  watchBorder: 'rgba(255, 196, 128, 1)',
+};
+
+export const SAMPLE_MOVIES = [
+  {
+    movie: 'Taxi Driver',
+    year: 1976,
+    rating: 5,
+    score: null,
+    date_watched: '2019-09-15',
+    previous_score: null,
+    notes: '',
+  },
+  {
+    movie: "Once Upon a Time... in Hollywood",
+    year: 2019,
+    rating: 4.5,
+    score: null,
+    date_watched: '2019-11-24',
+    previous_score: null,
+    notes: '',
+    review_link: 'https://boxd.it/SypCj',
+  },
+  {
+    movie: 'Swades',
+    year: 2004,
+    rating: null,
+    score: 70,
+    date_watched: '2019-11-28',
+    previous_score: null,
+    notes: '',
+  },
+  {
+    movie: 'Vampire Hunter D: Bloodlust',
+    year: 2000,
+    rating: 3.5,
+    score: 67,
+    date_watched: '2020-05-11',
+    previous_score: null,
+    notes: '',
+  },
+  {
+    movie: 'Midsommar',
+    year: 2019,
+    rating: 2.5,
+    score: null,
+    date_watched: '2020-05-29',
+    previous_score: null,
+    notes: '',
+    review_link: 'https://boxd.it/1aJiGH',
+  },
+  {
+    movie: 'Sunshine',
+    year: 2007,
+    rating: 3,
+    score: 52,
+    date_watched: '2023-04-23',
+    previous_score: 40,
+    notes: '',
+  },
+  {
+    movie: 'The Prestige',
+    year: 2006,
+    rating: 4,
+    score: 75,
+    date_watched: '2023-07-30',
+    previous_score: 67,
+    notes: '',
+  },
+  {
+    movie: 'Say Anything...',
+    year: 1989,
+    rating: 4.5,
+    score: 83,
+    date_watched: '2023-08-03',
+    previous_score: 69,
+    notes: '',
+  },
+  {
+    movie: 'Coherence',
+    year: 2013,
+    rating: 3.5,
+    score: 64,
+    date_watched: '2023-09-29',
+    previous_score: 47,
+    notes: '',
+  },
+  {
+    movie: 'Anatomy of a Fall',
+    year: 2023,
+    rating: 3.5,
+    score: 70,
+    date_watched: '2024-02-09',
+    previous_score: 70,
+    notes: '',
+  },
+  {
+    movie: 'V for Vendetta',
+    year: 2005,
+    rating: 3.5,
+    score: 66,
+    date_watched: '2024-11-07',
+    previous_score: 78,
+    notes: '',
+    review_link: 'https://boxd.it/7KwOP3',
+  },
+  {
+    movie: "Cutter's Way",
+    year: 1981,
+    rating: 5,
+    score: 94,
+    date_watched: '2025-03-07',
+    previous_score: 76,
+    notes: '',
+  },
+  {
+    movie: 'Forrest Gump',
+    year: 1994,
+    rating: 3.5,
+    score: 68,
+    date_watched: '2025-04-29',
+    previous_score: 68,
+    notes: '',
+  },
+];
+
+export const COL_ALIASES = {
+  movie: ['movie', 'film', 'title', 'name', 'movie_title'],
+  year: ['year', 'release_year', 'yr', 'release'],
+  rating: ['rating', 'stars', 'star_rating', 'letterboxd_rating'],
+  rewatch: ['rewatch', 're_watch', 'rewatched'],
+  score: ['score', 'my_score', 'points', 'grade', 'numeric_score'],
+  date_watched: ['date_watched', 'watched', 'watch_date', 'date', 'viewed_on'],
+  previous_score: ['previous_score', 'prev_score', 'old_score', 'previous', 'last_score'],
+  notes: ['notes', 'note', 'comment', 'memo'],
+  review_link: ['review_link', 'review_url', 'review_uri', 'letterboxd_uri', 'uri'],
+};
+
+export const DEFAULT_SORT_RULES = [{ col: 'date_watched', dir: 'desc' }];

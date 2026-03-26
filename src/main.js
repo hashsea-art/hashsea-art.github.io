@@ -1,0 +1,85 @@
+// App entrypoint: initializes UI modules, loads data, and coordinates top-level rendering.
+import { loadMoviesData } from './data/loader.js';
+import { state } from './state.js';
+import { initBackToTopLink, initInfoHub } from './ui/chrome.js';
+import { initCharts, renderCharts } from './ui/charts.js';
+import { initDetailPanel, openDetail } from './ui/detail.js';
+import { applyFilter, clearChartFilterType, initFilters, setChartFilter, syncSearchUi } from './ui/filters.js';
+import { initHeatmap } from './ui/heatmap.js';
+import { applySort, initSort } from './ui/sort.js';
+import { renderStats } from './ui/stats.js';
+import { initTable, renderTable } from './ui/table.js';
+
+function getElements() {
+  return {
+    loadAlert: document.getElementById('loadAlert'),
+    loadAlertText: document.getElementById('loadAlertText'),
+    searchInput: document.getElementById('searchInput'),
+  };
+}
+
+function setLoadAlert(message) {
+  const el = getElements();
+  if (!el.loadAlert || !el.loadAlertText) return;
+
+  if (!message) {
+    el.loadAlert.hidden = true;
+    el.loadAlertText.textContent = '';
+    return;
+  }
+
+  el.loadAlert.hidden = false;
+  el.loadAlertText.textContent = message;
+}
+
+function renderDashboard() {
+  renderStats();
+  renderCharts();
+  state.currentPage = 1;
+  renderTable();
+}
+
+function updateMovies(movies, alertMessage) {
+  const { searchInput } = getElements();
+  setLoadAlert(alertMessage);
+  state.allMovies = movies;
+  state.scoreChartDrilldown = null;
+  state.watchPeriodChartDrilldown = null;
+  syncSearchUi();
+
+  const hasDraftSearch = !!searchInput?.value.trim();
+  const hasCommittedSearch = state.committedSearchTerms.length > 0;
+  const hasChartFilter = Object.keys(state.activeChartFilters).length > 0;
+
+  if (hasDraftSearch || hasCommittedSearch || hasChartFilter) {
+    renderStats();
+    renderCharts();
+    state.currentPage = 1;
+    applyFilter();
+    return;
+  }
+
+  state.filtered = [...movies];
+  applySort();
+  renderDashboard();
+}
+
+async function loadData() {
+  const { movies, alertMessage } = await loadMoviesData();
+  updateMovies(movies, alertMessage);
+}
+
+async function init() {
+  initInfoHub();
+  initBackToTopLink();
+  initDetailPanel();
+  initTable({ openDetail });
+  initCharts({ setChartFilter });
+  initHeatmap({ setChartFilter, clearChartFilterType });
+  initSort({ onChange: renderTable });
+  initFilters({ onChange: renderTable, onChartsRebuild: renderCharts });
+
+  await loadData();
+}
+
+document.addEventListener('DOMContentLoaded', init);
