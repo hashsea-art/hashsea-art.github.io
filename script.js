@@ -9,6 +9,7 @@ const CSV_PATH = './data/movies.csv';
 const DEFAULT_PAGE_SIZE = 20;
 const PAGE_SIZE_OPTIONS = [20, 50, 100];
 const RATING_STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /** Matches diary theme in style.css (Chart.js cannot read CSS variables reliably). */
 const CHART_THEME = {
@@ -186,7 +187,7 @@ let ratingChart = null;
 let watchPeriodChart = null;
 let scoreChartDrilldown = null;
 let watchPeriodChartDrilldown = null;
-let activeChartFilter = null;
+let activeChartFilters = {};
 
 const $ = (id) => document.getElementById(id);
 const el = {
@@ -205,15 +206,17 @@ const el = {
   activeSearchFilter: $('activeSearchFilter'),
   activeSearchFilterLabel: $('activeSearchFilterLabel'),
   activeSearchFilterClear: $('activeSearchFilterClear'),
-  activeChartFilter: $('activeChartFilter'),
-  activeChartFilterLabel: $('activeChartFilterLabel'),
-  activeChartFilterClear: $('activeChartFilterClear'),
+  activeChartFilters: $('activeChartFilters'),
   scoreChartTitle: $('scoreChartTitle'),
   scoreChartDesc: $('scoreChartDesc'),
   scoreChartBack: $('scoreChartBack'),
   watchPeriodChartTitle: $('watchPeriodChartTitle'),
-  watchPeriodChartDesc: $('watchPeriodChartDesc'),
   watchPeriodChartBack: $('watchPeriodChartBack'),
+  monthHeatmap: $('monthHeatmap'),
+  topTarget: $('top'),
+  filmsAnchor: $('filmsAnchor'),
+  filmsSection: $('filmsSection'),
+  backToTopLink: $('backToTopLink'),
   tableBody: $('tableBody'),
   tableEmpty: $('tableEmpty'),
   tableEmptyMsg: $('tableEmptyMsg'),
@@ -229,8 +232,81 @@ document.addEventListener('DOMContentLoaded', () => {
   syncSearchClear();
   if (el.scoreChartBack) el.scoreChartBack.hidden = true;
   if (el.watchPeriodChartBack) el.watchPeriodChartBack.hidden = true;
+  initInfoHub();
+  initBackToTopLink();
   loadData();
 });
+
+function initInfoHub() {
+  const hub = document.querySelector('.info-hub');
+  const tabs = Array.from(document.querySelectorAll('.info-tab'));
+  const panels = Array.from(document.querySelectorAll('.info-panel-content'));
+  if (!hub || !tabs.length || !panels.length) return;
+
+  const closeAll = () => {
+    tabs.forEach((tab) => tab.setAttribute('aria-expanded', 'false'));
+    panels.forEach((panel) => {
+      panel.hidden = true;
+      panel.classList.remove('open');
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const panelId = tab.getAttribute('data-panel');
+      const panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) return;
+
+      const isOpen = tab.getAttribute('aria-expanded') === 'true';
+      closeAll();
+
+      if (isOpen) return;
+
+      tab.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      panel.classList.add('open');
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!hub.contains(event.target)) {
+      closeAll();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeAll();
+    }
+  });
+}
+
+function initBackToTopLink() {
+  if (!el.backToTopLink) return;
+
+  el.backToTopLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior = prefersReducedMotion ? 'auto' : 'smooth';
+
+    window.scrollTo({ top: 0, behavior });
+
+    const focusTop = () => {
+      if (!el.topTarget) return;
+      try {
+        el.topTarget.focus({ preventScroll: true });
+      } catch (error) {
+        el.topTarget.focus();
+      }
+    };
+
+    if (behavior === 'smooth') {
+      window.setTimeout(focusTop, 220);
+    } else {
+      focusTop();
+    }
+  });
+}
 
 function applySampleMovies() {
   allMovies = SAMPLE_MOVIES.map((m) => ({ ...m }));
@@ -872,7 +948,6 @@ function getWatchPeriodChartState(movies) {
       data: [],
       values: [],
       title: 'Films by Release Decade',
-      description: 'No release years available.',
       showBackButton: false,
     };
   }
@@ -903,7 +978,6 @@ function getWatchPeriodChartState(movies) {
       data,
       values,
       title: range.title,
-      description: 'Films by release year. Click a year to filter the film list.',
       showBackButton: true,
     };
   }
@@ -948,7 +1022,6 @@ function getWatchPeriodChartState(movies) {
     data,
     values,
     title: 'Films by Release Decade',
-    description: 'Films by release decade. Click a bar to drill down.',
     showBackButton: false,
   };
 }
@@ -958,7 +1031,6 @@ function buildWatchPeriodChart() {
   const state = getWatchPeriodChartState(datedMovies);
 
   if (el.watchPeriodChartTitle) el.watchPeriodChartTitle.textContent = state.title;
-  if (el.watchPeriodChartDesc) el.watchPeriodChartDesc.textContent = state.description;
   if (el.watchPeriodChartBack) el.watchPeriodChartBack.hidden = !state.showBackButton;
 
   if (typeof Chart === 'undefined') return;
@@ -1069,8 +1141,136 @@ function rebuildCharts() {
   buildWatchPeriodChart();
 }
 
+function monthHeatmapKey(year, monthIndex) {
+  return String(year) + '-' + String(monthIndex + 1).padStart(2, '0');
+}
+
+function getMovieHeatmapDate(movie) {
+  const raw = movie.date_watched || movie.first_watched;
+  if (!raw) return null;
+  const date = new Date(raw);
+  return Number.isFinite(date.getTime()) ? date : null;
+}
+
+function getMonthHeatmapState(movies) {
+  const countsByYear = new Map();
+
+  movies.forEach((movie) => {
+    const date = getMovieHeatmapDate(movie);
+    if (!date) return;
+
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const key = monthHeatmapKey(year, month);
+
+    if (!countsByYear.has(year)) countsByYear.set(year, Array(12).fill(0));
+    countsByYear.get(year)[month]++;
+  });
+
+  const years = [...countsByYear.keys()].sort((a, b) => b - a);
+  const rows = years.map((year) => ({ year, counts: countsByYear.get(year) }));
+  const maxCount = rows.reduce((max, row) => Math.max(max, ...row.counts), 0);
+
+  return { rows, maxCount };
+}
+
+function monthHeatmapLevel(count, maxCount) {
+  if (!count || !maxCount) return 0;
+  const ratio = count / maxCount;
+  if (ratio >= 0.75 || count === maxCount) return 4;
+  if (ratio >= 0.5) return 3;
+  if (ratio >= 0.25) return 2;
+  return 1;
+}
+
+function watchedMonthFilterLabel(filter) {
+  return MONTH_LABELS[filter.monthIndex] + ' ' + filter.year;
+}
+
+function renderMonthHeatmap() {
+  if (!el.monthHeatmap) return;
+
+  const state = getMonthHeatmapState(filtered);
+
+  el.monthHeatmap.textContent = '';
+
+  if (!state.rows.length) {
+    el.monthHeatmap.appendChild(
+      makeEl('p', 'month-heatmap-empty', 'No watched months are available in the current film list.')
+    );
+    return;
+  }
+
+  const scroll = makeEl(
+    'div',
+    'month-heatmap-scroll' + (state.rows.length > 5 ? ' month-heatmap-scroll--tall' : '')
+  );
+  const grid = makeEl('div', 'month-heatmap-grid');
+  grid.appendChild(makeEl('div', 'month-heatmap-head month-heatmap-head--year', 'Year'));
+  MONTH_LABELS.forEach((label) => {
+    grid.appendChild(makeEl('div', 'month-heatmap-head', label));
+  });
+
+  state.rows.forEach((row) => {
+    grid.appendChild(makeEl('div', 'month-heatmap-year', String(row.year)));
+
+    row.counts.forEach((count, monthIndex) => {
+      const key = monthHeatmapKey(row.year, monthIndex);
+      const cell = makeEl('button', 'month-heatmap-cell', String(count));
+      cell.type = 'button';
+      cell.classList.add(count ? 'month-heatmap-cell--lvl' + monthHeatmapLevel(count, state.maxCount) : 'month-heatmap-cell--empty');
+      cell.disabled = count === 0;
+
+      if (activeChartFilters.watched_month && key === activeChartFilters.watched_month.value) {
+        cell.classList.add('is-active');
+      }
+
+      const label =
+        MONTH_LABELS[monthIndex] +
+        ' ' +
+        row.year +
+        ' · ' +
+        count +
+        ' film' +
+        (count === 1 ? '' : 's');
+      cell.title = count ? label + ' · filter films watched in that month' : label;
+      cell.setAttribute('aria-label', count ? label + '. Filter films watched in that month.' : label + '.');
+
+      if (count) {
+        cell.addEventListener('click', () => {
+          if (activeChartFilters.watched_month && activeChartFilters.watched_month.value === key) {
+            clearChartFilterType('watched_month');
+            return;
+          }
+
+          setChartFilter({
+            type: 'watched_month',
+            value: key,
+            year: row.year,
+            monthIndex,
+          });
+        });
+      }
+
+      grid.appendChild(cell);
+    });
+  });
+
+  scroll.appendChild(grid);
+  el.monthHeatmap.appendChild(scroll);
+  scroll.scrollTop = 0;
+  scroll.scrollLeft = 0;
+
+  const legend = makeEl('div', 'month-heatmap-legend');
+  legend.appendChild(makeEl('span', '', 'Low'));
+  legend.appendChild(makeEl('span', 'month-heatmap-legend-swatch month-heatmap-legend-swatch--low'));
+  legend.appendChild(makeEl('span', 'month-heatmap-legend-swatch month-heatmap-legend-swatch--high'));
+  legend.appendChild(makeEl('span', '', 'High'));
+  el.monthHeatmap.appendChild(legend);
+}
+
 function clearChartFilter() {
-  activeChartFilter = null;
+  activeChartFilters = {};
   scoreChartDrilldown = null;
   watchPeriodChartDrilldown = null;
 }
@@ -1133,19 +1333,14 @@ function syncSearchClear() {
   const hasDraftSearch = el.searchInput.value.trim().length > 0;
   const hasCommittedSearch = committedSearchTerms.length > 0;
   const hasSearch = hasDraftSearch || hasCommittedSearch;
-  const hasChart = !!activeChartFilter;
+  const hasChart = hasActiveChartFilter();
 
   if (el.activeSearchFilter && el.activeSearchFilterLabel) {
     el.activeSearchFilter.hidden = !hasSearch;
     el.activeSearchFilterLabel.textContent = hasSearch ? searchFilterLabel() : '';
   }
 
-  if (el.activeChartFilter && el.activeChartFilterLabel) {
-    el.activeChartFilter.hidden = !hasChart;
-    el.activeChartFilterLabel.textContent = hasChart
-      ? 'Filtered by ' + chartFilterLabel()
-      : '';
-  }
+  renderActiveChartFilters();
 
   if (el.activeFilters) {
     el.activeFilters.hidden = !hasSearch && !hasChart;
@@ -1160,36 +1355,98 @@ function searchFilterLabel() {
 }
 
 function setChartFilter(filter) {
-  activeChartFilter = filter;
+  const nextFilters = { ...activeChartFilters };
+
+  if (filter.type === 'score' || filter.type === 'rating') {
+    delete nextFilters.score;
+    delete nextFilters.rating;
+    nextFilters[filter.type] = filter;
+  } else {
+    nextFilters[filter.type] = filter;
+  }
+
+  activeChartFilters = nextFilters;
   syncSearchClear();
   currentPage = 1;
   applyFilter();
-  $('tableWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  (el.filmsAnchor || el.filmsSection || $('tableWrap')).scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function matchesChartFilter(m) {
-  if (!activeChartFilter) return true;
-  if (activeChartFilter.type === 'score') return m.score !== null && Math.round(m.score) === activeChartFilter.value;
-  if (activeChartFilter.type === 'rating') return m.rating !== null && Math.abs(m.rating - activeChartFilter.value) < 1e-6;
-  if (activeChartFilter.type === 'release_year') return getMovieReleaseYear(m) === activeChartFilter.value;
-  return true;
+  const filters = Object.values(activeChartFilters);
+  if (!filters.length) return true;
+
+  return filters.every((filter) => {
+    if (filter.type === 'score') return m.score !== null && Math.round(m.score) === filter.value;
+    if (filter.type === 'rating') return m.rating !== null && Math.abs(m.rating - filter.value) < 1e-6;
+    if (filter.type === 'release_year') return getMovieReleaseYear(m) === filter.value;
+    if (filter.type === 'watched_month') {
+      const date = getMovieHeatmapDate(m);
+      if (!date) return false;
+      return monthHeatmapKey(date.getFullYear(), date.getMonth()) === filter.value;
+    }
+    return true;
+  });
 }
 
 function chartFilterLabel() {
-  if (!activeChartFilter) return '';
-  if (activeChartFilter.type === 'score') return 'score ' + activeChartFilter.value;
-  if (activeChartFilter.type === 'rating') return activeChartFilter.value + ' stars';
-  if (activeChartFilter.type === 'release_year') return 'released in ' + activeChartFilter.value;
-  return '';
+  const labels = [];
+  if (activeChartFilters.score) labels.push('score ' + activeChartFilters.score.value);
+  if (activeChartFilters.rating) labels.push(activeChartFilters.rating.value + ' stars');
+  if (activeChartFilters.release_year) labels.push('released in ' + activeChartFilters.release_year.value);
+  if (activeChartFilters.watched_month) labels.push('watched in ' + watchedMonthFilterLabel(activeChartFilters.watched_month));
+  return labels.join(' + ');
 }
 
-el.activeChartFilterClear.addEventListener('click', () => {
-  clearChartFilter();
+function hasActiveChartFilter() {
+  return Object.keys(activeChartFilters).length > 0;
+}
+
+function renderActiveChartFilters() {
+  if (!el.activeChartFilters) return;
+
+  const entries = chartFilterEntries();
+  el.activeChartFilters.textContent = '';
+  el.activeChartFilters.hidden = entries.length === 0;
+
+  entries.forEach((entry) => {
+    const pill = makeEl('div', 'active-filter');
+    pill.appendChild(makeEl('span', 'active-filter-label', entry.label));
+
+    const clear = makeEl('button', 'active-filter-clear', '\u2715');
+    clear.type = 'button';
+    clear.setAttribute('aria-label', 'Clear ' + entry.label + ' filter');
+    clear.addEventListener('click', () => {
+      clearChartFilterType(entry.type);
+    });
+
+    pill.appendChild(clear);
+    el.activeChartFilters.appendChild(pill);
+  });
+}
+
+function chartFilterEntries() {
+  const entries = [];
+  if (activeChartFilters.score) entries.push({ type: 'score', label: 'Score: ' + activeChartFilters.score.value });
+  if (activeChartFilters.rating) entries.push({ type: 'rating', label: 'Rating: ' + activeChartFilters.rating.value + ' stars' });
+  if (activeChartFilters.release_year) {
+    entries.push({ type: 'release_year', label: 'Year: ' + activeChartFilters.release_year.value });
+  }
+  if (activeChartFilters.watched_month) {
+    entries.push({ type: 'watched_month', label: 'Watched: ' + watchedMonthFilterLabel(activeChartFilters.watched_month) });
+  }
+  return entries;
+}
+
+function clearChartFilterType(type) {
+  if (!activeChartFilters[type]) return;
+  delete activeChartFilters[type];
+  activeChartFilters = { ...activeChartFilters };
   syncSearchClear();
   rebuildCharts();
   currentPage = 1;
   applyFilter();
-});
+}
 
 el.activeSearchFilterClear.addEventListener('click', () => {
   clearCommittedSearchTerms();
@@ -1404,7 +1661,7 @@ function createTableRowElement(movie, idx) {
   tr.appendChild(scoreCell);
 
   const notesCell = makeEl('td', 'notes-cell');
-  notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link));
+  notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link, movie.score));
   notesCell.title = movie.notes || (movie.review_link ? 'Open Letterboxd review' : '');
   tr.appendChild(notesCell);
 
@@ -1488,6 +1745,7 @@ function renderTable() {
   const page = filtered.slice(start, start + pageSize);
 
   renderTableCount(total);
+  renderMonthHeatmap();
 
   if (!total) {
     renderEmptyTableState();
@@ -1525,18 +1783,13 @@ function renderTableCount(total) {
 function tableCountParts(total) {
   const diaryEntries = filteredDiaryEntryCount();
   const filmWord = 'film' + (total !== 1 ? 's' : '');
-  const chartPhrase = activeChartFilter
-    ? activeChartFilter.type === 'rating'
-      ? ' rated ' + chartFilterLabel()
-      : activeChartFilter.type === 'score'
-        ? ' with ' + chartFilterLabel()
-        : ' ' + chartFilterLabel()
-    : '';
-  const baseLabel =
-    !activeChartFilter ? total + ' ' + filmWord : total + ' ' + filmWord + chartPhrase;
+  const chartLabel = chartFilterLabel();
+  const baseLabel = chartLabel
+    ? total + ' ' + filmWord + ' matching ' + chartLabel
+    : total + ' ' + filmWord;
 
   return {
-    main: total > 0 ? baseLabel : activeChartFilter ? '0 films' + chartPhrase : '0 films',
+    main: total > 0 ? baseLabel : chartLabel ? '0 films matching ' + chartLabel : '0 films',
     meta: diaryEntries + ' diary entr' + (diaryEntries === 1 ? 'y' : 'ies'),
   };
 }
@@ -1585,7 +1838,7 @@ function fmtNotesCell(n) {
   return s;
 }
 
-function createNotesCellContent(notes, reviewLink) {
+function createNotesCellContent(notes, reviewLink, score) {
   const noteText = fmtNotesCell(notes);
   if (!reviewLink) return document.createTextNode(noteText);
 
@@ -1594,7 +1847,7 @@ function createNotesCellContent(notes, reviewLink) {
     wrap.appendChild(makeEl('span', 'notes-preview', noteText));
   }
 
-  const link = makeEl('a', 'notes-review-link', 'Read');
+  const link = makeEl('a', 'notes-review-link ' + scoreToneClass(score), 'LB Review');
   link.href = reviewLink;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
@@ -1611,9 +1864,11 @@ function fmtScore(s) {
 }
 
 function createScoreContent(score) {
-  const cls =
-    score === null ? 'score-none' : score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
-  return makeEl('span', 'score-bubble ' + cls, fmtScore(score));
+  return makeEl('span', 'score-bubble ' + scoreToneClass(score), fmtScore(score));
+}
+
+function scoreToneClass(score) {
+  return score === null ? 'score-none' : score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
 }
 
 function fmtDelta(score, prev) {
@@ -1804,6 +2059,8 @@ function renderDetailScores(movie) {
     block.appendChild(makeEl('span', 'score-big' + (idx === scoresToRender.length - 1 ? ' current' : ''), String(entry.score)));
     if (entry.date_watched) {
       block.appendChild(makeEl('span', 'timeline-date', fmtDate(entry.date_watched)));
+    } else {
+      block.appendChild(makeEl('span', 'timeline-date timeline-date-empty', '\u00a0'));
     }
     fragment.appendChild(block);
   });

@@ -9,6 +9,7 @@
   />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Harsh's Film Diary</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -24,9 +25,166 @@
 </head>
 <body>
 
-<header class="masthead" id="top">
+<header class="masthead" id="top" tabindex="-1">
   <div class="masthead-inner">
     <h1 class="masthead-title">Harsh's Film Diary</h1>
+    <section class="info-hub" aria-label="About and links">
+      <div class="info-bar" role="tablist" aria-label="About and links">
+        <button type="button" class="info-tab" id="infoTabAboutMe" data-panel="aboutMePanel" aria-controls="aboutMePanel" aria-expanded="false">About Me</button>
+        <button type="button" class="info-tab" id="infoTabDiary" data-panel="aboutDiaryPanel" aria-controls="aboutDiaryPanel" aria-expanded="false">About This Diary</button>
+        <button type="button" class="info-tab" id="infoTabScoring" data-panel="scoringGuidePanel" aria-controls="scoringGuidePanel" aria-expanded="false">Scoring Guide</button>
+        <button type="button" class="info-tab" id="infoTabConnect" data-panel="connectPanel" aria-controls="connectPanel" aria-expanded="false">Connect</button>
+      </div>
+
+      <div class="info-panels">
+        <section class="info-panel-content" id="aboutMePanel" hidden>
+          <p class="info-panel-text info-panel-placeholder">A short note about me will go here once I add the text.</p>
+        </section>
+
+        <section class="info-panel-content" id="aboutDiaryPanel" hidden>
+          <p class="info-panel-text">This diary has been running since <strong>September 15, 2019</strong>. It works as both an archive and a living record of how my relationship with films changes over time.</p>
+        </section>
+
+        <section class="info-panel-content" id="scoringGuidePanel" hidden>
+          <div class="score-guide-body">
+            <div class="score-guide-scale" aria-label="Score to star rating scale">
+              <div class="score-guide-scale-grid">
+                <div class="score-guide-band">
+                  <span class="score-guide-range">91&ndash;100</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">5 <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">81&ndash;90</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">4&frac12; <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">71&ndash;80</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">4 <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">61&ndash;70</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">3&frac12; <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">51&ndash;60</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">3 <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">41&ndash;50</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">2&frac12; <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">31&ndash;40</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">2 <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">21&ndash;30</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">1&frac12; <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">11&ndash;20</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">1 <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+                <div class="score-guide-band">
+                  <span class="score-guide-range">1&ndash;10</span>
+                  <span class="score-guide-divider">:</span>
+                  <span class="score-guide-stars">&frac12; <span class="score-guide-star-icon" aria-hidden="true">&#9733;</span></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="score-guide-copy">
+              <p class="score-guide-text score-guide-lead">
+                The scale expands the usual star ratings into 100 values. Although the scores are numerical,
+                they don't follow strict mathematical rules&mdash;72 is not 7.2 and cannot be floored to
+                7/10 or 3&frac12; stars. The values 71&ndash;80 are just a way to distribute 4-star movies.
+              </p>
+              <div class="score-guide-notes">
+                <p class="score-guide-note">
+                  <strong>Why aren't star ratings enough?</strong> A movie scored 80 means significantly more
+                  to me than one rated 61, but because there aren't enough stars (pigeonhole principle), they
+                  end up with just half a star difference, which I can't endure. Nothing can replace an actual
+                  review, but this scale helps me broadly quantify my feelings towards a film.
+                </p>
+                <p class="score-guide-note">
+                  <strong>How do I score so precisely?</strong> The scores are estimates and I don't mull over
+                  1&ndash;2 points often. Any distinction or preference between films only becomes meaningful
+                  when the difference in score is sizeable (3 points). Also, scoring becomes intuitive with
+                  time, especially after 1500+ movies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="info-panel-content" id="connectPanel" hidden>
+          <div class="info-panel-links">
+            <a class="info-panel-link" href="https://letterboxd.com/hashsea/" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd: hashsea" title="Letterboxd · hashsea">
+              <span class="info-panel-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="8" cy="8" r="8" fill="#40BCF4"/>
+                  <circle cx="24" cy="8" r="8" fill="#00E054"/>
+                  <circle cx="40" cy="8" r="8" fill="#FF8000"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Letterboxd</span>
+            </a>
+            <a class="info-panel-link" href="mailto:hello@example.com" aria-label="Email: hello@example.com" title="Email · hello@example.com">
+              <span class="info-panel-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.75 6.75h16.5a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5H3.75a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                  <path d="m4 7.5 8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Email</span>
+            </a>
+            <a class="info-panel-link" href="https://instagram.com/example" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @example" title="Instagram · @example">
+              <span class="info-panel-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5" stroke="currentColor" stroke-width="1.6"/>
+                  <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.6"/>
+                  <circle cx="17.35" cy="6.7" r="1.1" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Instagram</span>
+            </a>
+            <a class="info-panel-link" href="https://reddit.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Reddit: u/example" title="Reddit · u/example">
+              <span class="info-panel-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="18.15" cy="8.35" r="1.45" fill="currentColor"/>
+                  <path d="M9.4 8.4 10.65 5l4.55 1" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M18.1 8.9c1.05.7 1.65 1.7 1.65 2.8 0 2.45-3.5 4.45-7.8 4.45s-7.8-2-7.8-4.45c0-1.08.58-2.05 1.58-2.74" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
+                  <circle cx="9" cy="11.45" r="1" fill="currentColor"/>
+                  <circle cx="14.95" cy="11.45" r="1" fill="currentColor"/>
+                  <path d="M9.15 14.05c.85.62 1.8.9 2.85.9 1.05 0 2.02-.3 2.88-.92" stroke="currentColor" stroke-width="1.45" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Reddit</span>
+            </a>
+            <a class="info-panel-link" href="https://www.serializd.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Serializd: example" title="Serializd · example">
+              <span class="info-panel-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="4.25" width="18" height="13" rx="3" stroke="currentColor" stroke-width="1.55"/>
+                  <path d="M8.5 20h7" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"/>
+                  <path d="M10 9.1c.6-.45 1.3-.68 2.12-.68 1.38 0 2.28.67 2.28 1.7 0 .78-.47 1.27-1.33 1.62l-.85.34c-.62.25-.9.52-.9.98 0 .13.02.28.06.44" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="11.45" cy="14.95" r=".78" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="visually-hidden">Serializd</span>
+            </a>
+          </div>
+        </section>
+      </div>
+    </section>
   </div>
 </header>
 
@@ -35,6 +193,8 @@
     <p class="load-alert-title">Using fallback sample data</p>
     <p class="load-alert-text" id="loadAlertText"></p>
   </section>
+
+  <div class="section-divider section-divider-intro"><span>Stats</span></div>
 
   <section class="section" aria-labelledby="stats-heading">
     <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
@@ -91,24 +251,34 @@
           <h3 class="chart-title" id="watchPeriodChartTitle">Films by Release Decade</h3>
           <button type="button" class="chart-back-btn" id="watchPeriodChartBack" hidden>Back</button>
         </div>
-        <p class="chart-desc" id="watchPeriodChartDesc">Films by release decade. Click a bar to drill down.</p>
       </header>
       <div class="chart-body"><canvas id="watchPeriodChart" aria-label="Films by release decade chart"></canvas></div>
     </article>
+
   </section>
 
-  <div class="section-divider"><span>Films</span></div>
+  <div class="section-divider"><span>Heatmap</span></div>
 
-  <section class="section" aria-labelledby="films-heading">
+  <section class="section" aria-labelledby="heatmap-heading">
+    <h2 id="heatmap-heading" class="visually-hidden">Monthly heatmap</h2>
+    <article class="chart-card month-heatmap-card">
+      <div class="month-heatmap" id="monthHeatmap" aria-label="Monthly watch heatmap"></div>
+    </article>
+  </section>
+
+  <div class="section-divider" id="filmsAnchor"><span>Films</span></div>
+
+  <section class="section" id="filmsSection" aria-labelledby="films-heading">
     <h2 id="films-heading" class="visually-hidden">Film list</h2>
     <div class="search-bar-wrap">
       <div class="search-input-wrap">
         <span class="search-icon" aria-hidden="true">&#x2315;</span>
         <label for="searchInput" class="visually-hidden">Search films</label>
         <input type="text" id="searchInput" class="search-input" role="searchbox"
-          placeholder="Search by title, year, or score &middot; Press Enter" autocomplete="off" inputmode="search" />
+          placeholder="Search by title, year, or score &middot; press enter" autocomplete="off" inputmode="search" />
         <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden>&#x2715;</button>
       </div>
+      <span class="search-count" id="searchCount" aria-live="polite"></span>
       <div class="page-size-wrap">
         <label for="pageSizeSelect" class="page-size-label">Rows</label>
         <select id="pageSizeSelect" class="page-size-select" aria-label="Entries per page">
@@ -117,17 +287,13 @@
           <option value="100">100</option>
         </select>
       </div>
-      <span class="search-count" id="searchCount" aria-live="polite"></span>
     </div>
     <div class="active-filters" id="activeFilters" hidden>
       <div class="active-filter" id="activeSearchFilter" hidden>
         <span class="active-filter-label" id="activeSearchFilterLabel"></span>
         <button type="button" class="active-filter-clear" id="activeSearchFilterClear" aria-label="Clear search filter">&#x2715;</button>
       </div>
-      <div class="active-filter" id="activeChartFilter" hidden>
-        <span class="active-filter-label" id="activeChartFilterLabel"></span>
-        <button type="button" class="active-filter-clear" id="activeChartFilterClear" aria-label="Clear active film filter">&#x2715;</button>
-      </div>
+      <div class="active-filter-list" id="activeChartFilters" hidden></div>
     </div>
     <p class="table-hint">Tip: Shift-click headers to add sort</p>
 
@@ -156,6 +322,14 @@
   </section>
 
 </main>
+
+<footer class="site-footer" aria-label="Site footer">
+  <div class="site-footer-inner">
+    <p class="site-footer-text">A personal archive of films.</p>
+    <p class="site-footer-rights">&copy; 2026 Harsh</p>
+    <a class="site-footer-link" href="#top" id="backToTopLink">Back to top</a>
+  </div>
+</footer>
 
 <aside class="detail-panel" id="detailPanel" aria-hidden="true" aria-labelledby="detailTitle">
   <button type="button" class="detail-close" id="detailClose">
@@ -188,4 +362,3 @@
 
 </body>
 </html>
-
