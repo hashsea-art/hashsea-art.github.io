@@ -29,15 +29,6 @@ export function scoreToneClass(score) {
   return score === null ? 'score-none' : score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
 }
 
-export function fmtDelta(score, previousScore) {
-  if (previousScore === null) return '\u2014';
-  if (score === null) return String(previousScore);
-  const delta = score - previousScore;
-  if (Math.abs(delta) < 0.05) return String(previousScore);
-  const sign = delta > 0 ? '+' : '';
-  return String(previousScore) + ' ' + sign + delta.toFixed(1);
-}
-
 export function renderStars(rating) {
   let html = '';
   for (let i = 1; i <= 5; i++) {

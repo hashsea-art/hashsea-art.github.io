@@ -28,7 +28,7 @@
   <div class="masthead-inner">
     <h1 class="masthead-title">Harsh's Film Diary</h1>
     <section class="info-hub" aria-label="About and links">
-      <div class="info-bar" role="tablist" aria-label="About and links">
+      <div class="info-bar" aria-label="About and links">
         <button type="button" class="info-tab" id="infoTabAboutMe" data-panel="aboutMePanel" aria-controls="aboutMePanel" aria-expanded="false">About Me</button>
         <button type="button" class="info-tab" id="infoTabDiary" data-panel="aboutDiaryPanel" aria-controls="aboutDiaryPanel" aria-expanded="false">About This Diary</button>
         <button type="button" class="info-tab" id="infoTabScoring" data-panel="scoringGuidePanel" aria-controls="scoringGuidePanel" aria-expanded="false">Scoring Guide</button>
@@ -102,24 +102,31 @@
             </div>
 
             <div class="score-guide-copy">
-              <p class="score-guide-text score-guide-lead">
-                The scale expands the usual star ratings into 100 values. The range 71&ndash;80 is a way to distribute 4-star movies.
-                Although the scores are numerical, they don't follow strict mathematical rules&mdash;72/100 cannot be floored to
-                7/10 or 3&frac12; stars.
-              </p>
+              <div class="score-guide-note">
+                <p class="score-guide-question">Rating scale</p>
+                <p class="score-guide-paragraph">
+                  The scale expands the usual star ratings into 100 values. The range 71&ndash;80 is a way to distribute 4-star movies.
+                  Although the scores are numerical, they don't follow strict mathematical rules&mdash;72/100 cannot be floored to
+                  7/10 or 3&frac12; stars.
+                </p>
+              </div>
               <div class="score-guide-notes">
-                <p class="score-guide-note">
-                  <strong>Why aren't star ratings enough?</strong> A movie scored 80 means significantly more
-                  to me than one rated 61, but because there aren't enough stars (pigeonhole principle), they
-                  end up with just half a star difference. I can't endure that. Ultimately, nothing can replace an actual
-                  review, but this scale helps me broadly quantify my feelings towards a film.
-                </p>
-                <p class="score-guide-note">
-                  <strong>How do I score so precisely?</strong> The scores are estimates and I don't mull over
-                  1&ndash;2 points often. Any distinction or preference between films only becomes meaningful
-                  when the difference in score is sizeable (3 points). Also, scoring becomes intuitive with
-                  time.
-                </p>
+                <div class="score-guide-note">
+                  <p class="score-guide-question">Why aren't star ratings enough?</p>
+                  <p class="score-guide-paragraph">
+                    A movie scored 80 means significantly more to me than one rated 61, but because there aren't enough stars
+                    (pigeonhole principle), they end up with just half a star difference. I can't endure that. Ultimately,
+                    nothing can replace an actual review, but this scale helps me broadly quantify my feelings towards a film.
+                  </p>
+                </div>
+                <div class="score-guide-note">
+                  <p class="score-guide-question">How do I score so precisely?</p>
+                  <p class="score-guide-paragraph">
+                    The scores are estimates and I don't mull over 1&ndash;2 points often. Any distinction or preference
+                    between films only becomes meaningful when the difference in score is sizeable (3 points). Also,
+                    scoring becomes intuitive with time.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -199,7 +206,7 @@
 
 <main class="dashboard">
   <section class="load-alert" id="loadAlert" hidden aria-live="polite">
-    <p class="load-alert-title">Using fallback sample data</p>
+    <p class="load-alert-title">Data load issue</p>
     <p class="load-alert-text" id="loadAlertText"></p>
   </section>
 
