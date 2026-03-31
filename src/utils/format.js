@@ -26,7 +26,7 @@ export function fmtScore(score) {
 }
 
 export function scoreToneClass(score) {
-  return score === null ? 'score-none' : score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
+  return score === null ? 'score-none' : score >= 51 ? 'score-high' : score >= 31 ? 'score-mid' : 'score-low';
 }
 
 export function renderStars(rating) {

@@ -8,9 +8,12 @@ function getElements() {
 
 export function initInfoHub() {
   const hub = document.querySelector('.info-hub');
+  const pageBody = document.body;
   const tabs = Array.from(document.querySelectorAll('.info-tab'));
   const panels = Array.from(document.querySelectorAll('.info-panel-content'));
-  if (!hub || !tabs.length || !panels.length) return;
+  if (!hub || !pageBody || !tabs.length || !panels.length) return;
+
+  const getOpenPanel = () => panels.find((panel) => !panel.hidden) || null;
 
   const closeAll = () => {
     tabs.forEach((tab) => tab.setAttribute('aria-expanded', 'false'));
@@ -18,6 +21,7 @@ export function initInfoHub() {
       panel.hidden = true;
       panel.classList.remove('open');
     });
+    pageBody.classList.remove('scoring-guide-open');
   };
 
   tabs.forEach((tab) => {
@@ -34,6 +38,9 @@ export function initInfoHub() {
       tab.setAttribute('aria-expanded', 'true');
       panel.hidden = false;
       panel.classList.add('open');
+      if (panelId === 'scoringGuidePanel') {
+        pageBody.classList.add('scoring-guide-open');
+      }
     });
   });
 
@@ -44,6 +51,16 @@ export function initInfoHub() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeAll();
   });
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      const openPanel = getOpenPanel();
+      if (!openPanel) return;
+      if (openPanel.getBoundingClientRect().bottom <= 0) closeAll();
+    },
+    { passive: true }
+  );
 }
 
 export function initBackToTopLink() {

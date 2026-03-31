@@ -61,7 +61,7 @@ function createScoreContent(score) {
   return makeEl('span', 'score-bubble ' + scoreToneClass(score), fmtScore(score));
 }
 
-function createNotesCellContent(notes, reviewLink, score) {
+function createNotesCellContent(notes, reviewLink) {
   const noteText = fmtNotesCell(notes);
   if (!reviewLink) return document.createTextNode(noteText);
 
@@ -70,7 +70,7 @@ function createNotesCellContent(notes, reviewLink, score) {
     wrap.appendChild(makeEl('span', 'notes-preview', noteText));
   }
 
-  const link = makeEl('a', 'notes-review-link ' + scoreToneClass(score), 'LB Review');
+  const link = makeEl('a', 'notes-review-link', 'LB Review');
   link.href = reviewLink;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
@@ -176,7 +176,7 @@ function createTableRowElement(movie, idx) {
   tr.appendChild(scoreCell);
 
   const notesCell = makeEl('td', 'notes-cell');
-  notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link, movie.score));
+  notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link));
   notesCell.title = movie.notes || (movie.review_link ? 'Open Letterboxd review' : '');
   tr.appendChild(notesCell);
 
