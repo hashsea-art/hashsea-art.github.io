@@ -272,7 +272,7 @@ function renderPagination(total) {
     tableWrap?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  let html = mkBtn('\u2039', state.currentPage - 1, state.currentPage === 1, false);
+  let pageButtons = mkBtn('\u2039', state.currentPage - 1, state.currentPage === 1, false);
   const near = new Set(
     [1, pages, state.currentPage - 1, state.currentPage, state.currentPage + 1].filter(
       (page) => page >= 1 && page <= pages
@@ -282,11 +282,12 @@ function renderPagination(total) {
   [...near]
     .sort((a, b) => a - b)
     .forEach((page) => {
-      if (page - prev > 1) html += '<button type="button" class="pg-btn" disabled>\u2026</button>';
-      html += mkBtn(String(page), page, false, page === state.currentPage);
+      if (page - prev > 1) pageButtons += '<button type="button" class="pg-btn" disabled>\u2026</button>';
+      pageButtons += mkBtn(String(page), page, false, page === state.currentPage);
       prev = page;
     });
-  html += mkBtn('\u203a', state.currentPage + 1, state.currentPage === pages, false);
+  pageButtons += mkBtn('\u203a', state.currentPage + 1, state.currentPage === pages, false);
+  let html = '<div class="pagination-pages">' + pageButtons + '</div>';
   html +=
     '<form class="pg-jump" aria-label="Go to page">' +
     '<label class="pg-jump-label" for="pageJumpInput">Page</label>' +
