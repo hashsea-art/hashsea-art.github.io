@@ -41,9 +41,7 @@ function extendSortRules(col) {
 function sortKey(movie, col) {
   const value = movie[col];
   if (col === 'date_watched') {
-    const dateValue = movie.first_watched || value;
-    if (!dateValue) return null;
-    const time = new Date(dateValue).getTime();
+    const time = new Date(value).getTime();
     return Number.isFinite(time) ? time : null;
   }
 

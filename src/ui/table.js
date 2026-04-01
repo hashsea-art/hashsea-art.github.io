@@ -147,7 +147,6 @@ function createTableRowElement(movie, idx) {
   const titleCell = makeEl('td', 'film-title-cell');
   const titleWrap = makeEl('div', 'film-title-wrap');
   const title = makeEl('span', 'film-title', movie.movie);
-  title.title = movie.movie;
   titleWrap.appendChild(title);
 
   const preview = createDiaryPreviewElement(movie);
@@ -265,6 +264,14 @@ function renderPagination(total) {
     label +
     '</button>';
 
+  const goToPage = (page) => {
+    const nextPage = Math.max(1, Math.min(pages, page));
+    if (!Number.isFinite(nextPage) || nextPage === state.currentPage) return;
+    state.currentPage = nextPage;
+    renderTable();
+    tableWrap?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   let html = mkBtn('\u2039', state.currentPage - 1, state.currentPage === 1, false);
   const near = new Set(
     [1, pages, state.currentPage - 1, state.currentPage, state.currentPage + 1].filter(
@@ -280,15 +287,38 @@ function renderPagination(total) {
       prev = page;
     });
   html += mkBtn('\u203a', state.currentPage + 1, state.currentPage === pages, false);
+  html +=
+    '<form class="pg-jump" aria-label="Go to page">' +
+    '<label class="pg-jump-label" for="pageJumpInput">Page</label>' +
+    '<input id="pageJumpInput" class="pg-jump-input" type="number" min="1" max="' +
+    pages +
+    '" value="' +
+    state.currentPage +
+    '" inputmode="numeric" />' +
+    '<button type="submit" class="pg-jump-btn">Go</button>' +
+    '</form>';
   pagination.innerHTML = html;
 
   pagination.querySelectorAll('.pg-btn[data-page]').forEach((button) => {
     button.addEventListener('click', () => {
       if (button.disabled || button.classList.contains('active')) return;
-      state.currentPage = Number(button.dataset.page);
-      renderTable();
-      tableWrap?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      goToPage(Number(button.dataset.page));
     });
+  });
+
+  const jumpForm = pagination.querySelector('.pg-jump');
+  const jumpInput = pagination.querySelector('.pg-jump-input');
+  jumpForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!(jumpInput instanceof HTMLInputElement)) return;
+
+    const rawPage = parseInt(jumpInput.value, 10);
+    if (!Number.isFinite(rawPage)) {
+      jumpInput.value = String(state.currentPage);
+      return;
+    }
+
+    goToPage(rawPage);
   });
 }
 
