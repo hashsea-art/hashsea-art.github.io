@@ -150,7 +150,7 @@
 
         <section class="info-panel-content" id="connectPanel" hidden>
           <div class="info-panel-links">
-            <a class="info-panel-link" href="https://letterboxd.com/hashsea/" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd: hashsea" title="Letterboxd · hashsea">
+            <a class="info-panel-link" href="https://letterboxd.com/hashsea/" target="_blank" rel="noopener noreferrer" aria-label="Letterboxd: hashsea">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
                   <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,7 +168,7 @@
                 <span class="info-panel-link-note">The main place where I log films, scores, rewatches, and quick reactions.</span>
               </span>
             </a>
-            <a class="info-panel-link" href="mailto:hello@example.com" aria-label="Email: hello@example.com" title="Email · hello@example.com">
+            <a class="info-panel-link" href="mailto:hello@example.com" aria-label="Email: hello@example.com">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
                   <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +185,7 @@
                 <span class="info-panel-link-note">The easiest way to reach me directly for anything more personal, practical, or long-form.</span>
               </span>
             </a>
-            <a class="info-panel-link" href="https://reddit.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Reddit: u/example" title="Reddit · u/example">
+            <a class="info-panel-link" href="https://reddit.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Reddit: u/example">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
                   <img src="https://www.reddit.com/favicon.ico" alt="" />
@@ -199,7 +199,7 @@
                 <span class="info-panel-link-note">Where I occasionally post, comment, and drift into more informal film-adjacent conversation.</span>
               </span>
             </a>
-            <a class="info-panel-link" href="https://www.serializd.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Serializd: example" title="Serializd · example">
+            <a class="info-panel-link" href="https://www.serializd.com/u/example" target="_blank" rel="noopener noreferrer" aria-label="Serializd: example">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
                   <img src="https://www.serializd.com/favicon.ico" alt="" />
@@ -254,7 +254,7 @@
     </div>
   </section>
 
-  <div class="section-divider"><span>Charts</span></div>
+  <div class="section-divider" id="chartsAnchor"><span>Charts</span></div>
 
   <section class="section" aria-labelledby="charts-heading">
     <h2 id="charts-heading" class="visually-hidden">Charts</h2>
@@ -310,6 +310,7 @@
           placeholder="Search by title, year, or score &middot; press enter" autocomplete="off" inputmode="search" />
         <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden>&#x2715;</button>
       </div>
+      <button type="button" class="search-jump-btn" id="backToChartsButton" aria-label="Go back to charts" title="Go back to charts" hidden><span class="search-jump-icon" aria-hidden="true">&uarr;</span></button>
       <span class="search-count" id="searchCount" aria-live="polite"></span>
       <div class="page-size-wrap">
         <label for="pageSizeSelect" class="page-size-label">Rows</label>

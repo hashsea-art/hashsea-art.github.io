@@ -741,6 +741,13 @@ select:focus-visible {
 #watchPeriodChart {
   cursor: pointer;
 }
+@media (hover: none) and (pointer: coarse) {
+  #scoreChart,
+  #ratingChart,
+  #watchPeriodChart {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
 .month-heatmap-card {
   --heatmap-row-height: 2.72rem;
   --heatmap-header-height: 1.05rem;
@@ -933,47 +940,91 @@ select:focus-visible {
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
+.search-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink-2);
+  font-size: 0.82rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.search-jump-icon {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1;
+  transform: translateY(-0.5px);
+}
+.search-jump-btn:hover {
+  color: var(--ink);
+  border-color: rgba(255, 196, 128, 0.28);
+  background: rgba(255, 196, 128, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 18px rgba(0, 0, 0, 0.16);
+  transform: translateY(-1px);
+}
+.search-jump-btn:focus-visible {
+  outline: 2px solid rgba(255, 196, 128, 0.42);
+  outline-offset: 2px;
+}
 .page-size-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.03rem 0.12rem 0.03rem 0.42rem;
+  align-self: center;
+  gap: 0.22rem;
+  padding: 0.03rem 0.12rem 0.03rem 0.36rem;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid var(--border-subtle);
   border-radius: 999px;
 }
+.page-size-wrap:focus-within {
+  border-color: rgba(236, 240, 245, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+}
 .page-size-label {
   color: var(--ink-3);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-family: var(--font-body);
   font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .page-size-select {
-  min-width: 3.8rem;
+  min-width: 3.35rem;
   background: transparent;
   border: none;
   border-left: 1px solid var(--border-subtle);
   border-radius: 0;
-  padding: 0.34rem 1.1rem 0.34rem 0.48rem;
+  padding: 0.3rem 1rem 0.3rem 0.44rem;
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 0.74rem;
-  line-height: 1.1;
+  font-size: 0.72rem;
+  line-height: 1;
   letter-spacing: 0.01em;
   outline: none;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238793a1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.35'/%3E%3C/svg%3E");
-  background-position: calc(100% - 0.52rem) 50%;
-  background-size: 0.6rem 0.38rem;
+  background-position: calc(100% - 0.45rem) 50%;
+  background-size: 0.55rem 0.34rem;
   background-repeat: no-repeat;
   opacity: 0.92;
 }
-.page-size-select:focus {
-  color: var(--ink);
+.page-size-select:focus-visible {
+  outline: none;
 }
 .page-size-select option {
   background: #12181f;
@@ -1053,11 +1104,6 @@ select:focus-visible {
 .search-clear:focus-visible {
   outline: none;
 }
-.search-input::-webkit-search-cancel-button,
-.search-input::-webkit-search-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-}
 .search-clear {
   position: absolute;
   right: 0.6rem;
@@ -1066,8 +1112,8 @@ select:focus-visible {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.78rem;
   color: var(--ink-3);
+  font-size: 0.78rem;
   padding: 0.2rem 0.35rem;
   border-radius: 3px;
   transition: color 0.15s, background 0.15s;
@@ -1082,29 +1128,34 @@ select:focus-visible {
 .search-count {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  align-self: center;
+  gap: 0.38rem;
   margin-left: auto;
   padding: 0;
+  line-height: 1;
   white-space: nowrap;
   font-variant-numeric: tabular-nums lining-nums;
 }
 .search-count-main {
-  font-size: 0.86rem;
-  color: var(--ink);
+  font-size: 0.78rem;
   font-family: var(--font-body);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
 }
 .search-count-sep {
-  color: rgba(198, 208, 218, 0.62);
-  font-size: 0.78rem;
+  color: rgba(198, 208, 218, 0.44);
+  font-size: 0.72rem;
   line-height: 1;
 }
 .search-count-meta {
-  font-size: 0.83rem;
-  color: var(--ink-2);
+  font-size: 0.78rem;
+  color: var(--ink-3);
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
 }
 .active-filters {
   display: flex;
@@ -1147,6 +1198,7 @@ select:focus-visible {
 .active-filter-list[hidden],
 .active-filter[hidden],
 .search-clear[hidden],
+.search-jump-btn[hidden],
 .chart-back-btn[hidden] {
   display: none !important;
 }
@@ -1433,7 +1485,7 @@ td {
   text-overflow: ellipsis;
 }
 .table-hint {
-  margin: 0 0 0.55rem;
+  margin: 0.35rem 0 0.55rem;
   text-align: right;
   color: var(--ink-3);
   font-size: 0.62rem;
@@ -1752,9 +1804,9 @@ body.scoring-guide-open .site-footer {
   display: inline-flex;
   align-items: center;
   gap: 0.36rem;
-  color: #dbefff;
+  color: var(--ink-3);
   font-size: 0.76rem;
-  font-weight: 600;
+  font-weight: 400;
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.15s ease;
@@ -1767,7 +1819,7 @@ body.scoring-guide-open .site-footer {
 }
 .site-footer-link:hover,
 .site-footer-link:focus-visible {
-  color: #f1f5f9;
+  color: var(--ink-2);
 }
 
 /* Detail panel */
@@ -2055,16 +2107,16 @@ body.scoring-guide-open .site-footer {
     white-space: normal;
   }
   .search-count-main {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
   }
   .search-count-meta {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
   }
   .active-filters {
     margin-bottom: 0.5rem;
   }
   .table-hint {
-    margin: 0 0 0.5rem;
+    margin: 0.2rem 0 0.5rem;
     text-align: left;
     font-size: 0.58rem;
     white-space: normal;
@@ -2246,10 +2298,10 @@ body.scoring-guide-open .site-footer {
     margin-top: 0.46rem;
   }
   .page-size-wrap {
-    padding-left: 0.38rem;
+    padding-left: 0.34rem;
   }
   .page-size-select {
-    min-width: 3.5rem;
+    min-width: 3.1rem;
   }
   .table-hint {
     font-size: 0.58rem;
@@ -2281,10 +2333,10 @@ body.scoring-guide-open .site-footer {
     gap: 0.32rem;
   }
   .search-count-main {
-    font-size: 0.74rem;
+    font-size: 0.7rem;
   }
   .search-count-meta {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
   .site-footer-text,
   .site-footer-rights,

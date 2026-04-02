@@ -1,7 +1,11 @@
 // Formatting helpers for dates, scores, percentages, and display markup.
-export function formatPct(value) {
-  const fixed = value.toFixed(1);
+export function formatTenths(value) {
+  const fixed = Number(value).toFixed(1);
   return fixed.endsWith('.0') ? fixed.slice(0, -2) : fixed;
+}
+
+export function formatPct(value) {
+  return formatTenths(value);
 }
 
 export function fmtDate(value) {

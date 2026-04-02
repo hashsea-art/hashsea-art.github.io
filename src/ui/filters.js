@@ -17,7 +17,9 @@ function getElements() {
     activeSearchFilter: document.getElementById('activeSearchFilter'),
     activeSearchFilterLabel: document.getElementById('activeSearchFilterLabel'),
     activeSearchFilterClear: document.getElementById('activeSearchFilterClear'),
+    backToChartsButton: document.getElementById('backToChartsButton'),
     activeChartFilters: document.getElementById('activeChartFilters'),
+    chartsAnchor: document.getElementById('chartsAnchor'),
     filmsAnchor: document.getElementById('filmsAnchor'),
     filmsSection: document.getElementById('filmsSection'),
     tableWrap: document.getElementById('tableWrap'),
@@ -112,6 +114,14 @@ export function hasActiveChartFilter() {
   return Object.keys(state.activeChartFilters).length > 0;
 }
 
+function hasChartsSectionFilter() {
+  return !!(
+    state.activeChartFilters.score ||
+    state.activeChartFilters.rating ||
+    state.activeChartFilters.release_year
+  );
+}
+
 function chartFilterEntries() {
   const entries = [];
   if (state.activeChartFilters.score) {
@@ -166,10 +176,15 @@ export function syncSearchUi() {
   const hasCommittedSearch = state.committedSearchTerms.length > 0;
   const hasSearch = hasDraftSearch || hasCommittedSearch;
   const hasChart = hasActiveChartFilter();
+  const hasChartsFilter = hasChartsSectionFilter();
 
   if (el.activeSearchFilter && el.activeSearchFilterLabel) {
     el.activeSearchFilter.hidden = !hasSearch;
     el.activeSearchFilterLabel.textContent = hasSearch ? searchFilterLabel() : '';
+  }
+
+  if (el.backToChartsButton) {
+    el.backToChartsButton.hidden = !hasChartsFilter;
   }
 
   renderActiveChartFilters();
@@ -275,6 +290,12 @@ export function initFilters({ onChange, onChartsRebuild }) {
       syncSearchUi();
       state.currentPage = 1;
       applyFilter();
+    });
+  }
+
+  if (el.backToChartsButton) {
+    el.backToChartsButton.addEventListener('click', () => {
+      el.chartsAnchor?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 

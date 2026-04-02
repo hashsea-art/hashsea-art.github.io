@@ -2,7 +2,7 @@
 import { state } from '../state.js';
 import { getLoggedWatchHistory, getWatchHistory, watchTimelineLabel } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
-import { fmtDate, fmtNotesCell, fmtScore, scoreToneClass } from '../utils/format.js';
+import { fmtDate, fmtNotesCell, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
 import { chartFilterLabel } from './filters.js';
 import { renderMonthHeatmap } from './heatmap.js';
 import { syncSortUI } from './sort.js';
@@ -52,7 +52,7 @@ function createDeltaContent(score, previousScore) {
 
   wrap.appendChild(document.createTextNode(String(previousScore) + ' '));
   const delta = score - previousScore;
-  const deltaText = (delta > 0 ? '+' : '') + delta.toFixed(1);
+  const deltaText = (delta > 0 ? '+' : '') + formatTenths(delta);
   wrap.appendChild(makeEl('span', delta > 0 ? 'delta-pos' : 'delta-neg', deltaText));
   return wrap;
 }
@@ -200,10 +200,10 @@ function tableCountParts(total) {
   const diaryEntries = filteredDiaryEntryCount();
   const filmWord = 'film' + (total !== 1 ? 's' : '');
   const activeChartLabel = chartFilterLabel();
-  const baseLabel = activeChartLabel ? total + ' ' + filmWord + ' matching ' + activeChartLabel : total + ' ' + filmWord;
+  const main = total + ' ' + filmWord + (activeChartLabel ? ' matching ' + activeChartLabel : '');
 
   return {
-    main: total > 0 ? baseLabel : activeChartLabel ? '0 films matching ' + activeChartLabel : '0 films',
+    main,
     meta: diaryEntries + ' diary entr' + (diaryEntries === 1 ? 'y' : 'ies'),
   };
 }
