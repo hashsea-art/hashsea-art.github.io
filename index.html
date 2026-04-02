@@ -307,8 +307,9 @@
         <span class="search-icon" aria-hidden="true">&#x2315;</span>
         <label for="searchInput" class="visually-hidden">Search films</label>
         <input type="text" id="searchInput" class="search-input" role="searchbox"
-          placeholder="Search by title, year, or score &middot; press enter" autocomplete="off" inputmode="search" />
-        <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden>&#x2715;</button>
+          placeholder="Search by title, year, or score &middot; press enter" autocomplete="off" inputmode="search" aria-describedby="searchStatus" />
+        <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden></button>
+        <button type="button" class="search-apply" id="searchApply" aria-label="Apply search" hidden></button>
       </div>
       <button type="button" class="search-jump-btn" id="backToChartsButton" aria-label="Go back to charts" title="Go back to charts" hidden><span class="search-jump-icon" aria-hidden="true">&uarr;</span></button>
       <span class="search-count" id="searchCount" aria-live="polite"></span>
@@ -320,6 +321,7 @@
           <option value="100">100</option>
         </select>
       </div>
+      <p class="search-status" id="searchStatus" hidden aria-live="polite"></p>
     </div>
     <div class="active-filters" id="activeFilters" hidden>
       <div class="active-filter" id="activeSearchFilter" hidden>

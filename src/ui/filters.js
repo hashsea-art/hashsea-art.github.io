@@ -1,5 +1,5 @@
 // Search, chart-filter, and page-size interactions for narrowing the film list.
-import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, MONTH_LABELS } from '../constants.js';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, MONTH_LABELS, RATING_STEPS } from '../constants.js';
 import { state } from '../state.js';
 import { getMovieHeatmapDate, getMovieReleaseYear, monthHeatmapKey } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
@@ -7,11 +7,19 @@ import { applySort } from './sort.js';
 
 let onResultsChange = () => {};
 let onRebuildCharts = () => {};
+let shouldShowDraftVerification = false;
+const SPECIAL_SEARCH_TYPES = new Map([
+  ['score', 'score'],
+  ['rating', 'rating'],
+  ['year', 'release_year'],
+]);
 
 function getElements() {
   return {
     searchInput: document.getElementById('searchInput'),
+    searchStatus: document.getElementById('searchStatus'),
     searchClear: document.getElementById('searchClear'),
+    searchApply: document.getElementById('searchApply'),
     pageSizeSelect: document.getElementById('pageSizeSelect'),
     activeFilters: document.getElementById('activeFilters'),
     activeSearchFilter: document.getElementById('activeSearchFilter'),
@@ -28,6 +36,109 @@ function getElements() {
 
 function normalizedSearchTerm(value) {
   return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+function integerOnly(value) {
+  if (!/^-?\d+$/.test(value)) return null;
+  const parsed = parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatChartFilterEntryLabel(filter) {
+  if (filter.type === 'score') return 'Score: ' + filter.value;
+  if (filter.type === 'rating') return 'Rating: ' + filter.value + ' stars';
+  if (filter.type === 'release_year') return 'Year: ' + filter.value;
+  if (filter.type === 'watched_month') return 'Watched: ' + watchedMonthFilterLabel(filter);
+  return '';
+}
+
+function draftChartFilterMessage(filter) {
+  const label = formatChartFilterEntryLabel(filter);
+
+  if (filter.type === 'score' && state.activeChartFilters.rating) {
+    return 'Press Enter to replace ' + formatChartFilterEntryLabel(state.activeChartFilters.rating) + ' with ' + label + '.';
+  }
+
+  if (filter.type === 'rating' && state.activeChartFilters.score) {
+    return 'Press Enter to replace ' + formatChartFilterEntryLabel(state.activeChartFilters.score) + ' with ' + label + '.';
+  }
+
+  return 'Press Enter to apply ' + label + '.';
+}
+
+function parseDraftSearch(value) {
+  const normalized = normalizedSearchTerm(value);
+  if (!normalized) return { kind: 'empty' };
+
+  const firstColon = normalized.indexOf(':');
+  if (firstColon === -1) return { kind: 'text', term: normalized };
+
+  if (normalized.indexOf(':', firstColon + 1) !== -1) {
+    return {
+      kind: 'invalid',
+      message: 'Use only one colon filter at a time. Allowed filters are Score: Year: and Rating:.',
+    };
+  }
+
+  const prefix = normalized.slice(0, firstColon).trim().toLowerCase();
+  const rawValue = normalized.slice(firstColon + 1).trim();
+  const filterType = SPECIAL_SEARCH_TYPES.get(prefix);
+
+  if (!filterType) {
+    return {
+      kind: 'invalid',
+      message: 'Only Score: Year: and Rating: can be used with a colon.',
+    };
+  }
+
+  if (!rawValue) {
+    return {
+      kind: 'invalid',
+      message: 'Add a value after ' + prefix.charAt(0).toUpperCase() + prefix.slice(1) + ':',
+    };
+  }
+
+  if (filterType === 'score') {
+    const score = integerOnly(rawValue);
+    if (score === null || score < 1 || score > 100) {
+      return {
+        kind: 'invalid',
+        message: 'Use Score: with a whole number from 1 to 100 only.',
+      };
+    }
+
+    const filter = { type: 'score', value: score };
+    return { kind: 'chart', filter, message: draftChartFilterMessage(filter) };
+  }
+
+  if (filterType === 'release_year') {
+    const year = integerOnly(rawValue);
+    if (year === null || year <= 0) {
+      return {
+        kind: 'invalid',
+        message: 'Use Year: with a whole-number release year only.',
+      };
+    }
+
+    const filter = { type: 'release_year', value: year };
+    return { kind: 'chart', filter, message: draftChartFilterMessage(filter) };
+  }
+
+  const rating = Number(rawValue);
+  const matchesStep =
+    /^-?\d+(\.\d+)?$/.test(rawValue) &&
+    Number.isFinite(rating) &&
+    RATING_STEPS.some((step) => Math.abs(step - rating) < 1e-6);
+
+  if (!matchesStep) {
+    return {
+      kind: 'invalid',
+      message: 'Use Rating: with a value from 0.5 to 5 in 0.5 steps only.',
+    };
+  }
+
+  const filter = { type: 'rating', value: rating };
+  return { kind: 'chart', filter, message: draftChartFilterMessage(filter) };
 }
 
 function commitSearchTerm(term) {
@@ -88,10 +199,7 @@ function matchesChartFilter(movie) {
 }
 
 function searchFilterLabel() {
-  const { searchInput } = getElements();
-  const draft = searchInput ? searchInput.value.trim() : '';
   const parts = state.committedSearchTerms.map((term) => '"' + term + '"');
-  if (draft) parts.push('typing "' + draft + '"');
   return 'Search: ' + parts.join(' + ');
 }
 
@@ -125,18 +233,18 @@ function hasChartsSectionFilter() {
 function chartFilterEntries() {
   const entries = [];
   if (state.activeChartFilters.score) {
-    entries.push({ type: 'score', label: 'Score: ' + state.activeChartFilters.score.value });
+    entries.push({ type: 'score', label: formatChartFilterEntryLabel(state.activeChartFilters.score) });
   }
   if (state.activeChartFilters.rating) {
-    entries.push({ type: 'rating', label: 'Rating: ' + state.activeChartFilters.rating.value + ' stars' });
+    entries.push({ type: 'rating', label: formatChartFilterEntryLabel(state.activeChartFilters.rating) });
   }
   if (state.activeChartFilters.release_year) {
-    entries.push({ type: 'release_year', label: 'Year: ' + state.activeChartFilters.release_year.value });
+    entries.push({ type: 'release_year', label: formatChartFilterEntryLabel(state.activeChartFilters.release_year) });
   }
   if (state.activeChartFilters.watched_month) {
     entries.push({
       type: 'watched_month',
-      label: 'Watched: ' + watchedMonthFilterLabel(state.activeChartFilters.watched_month),
+      label: formatChartFilterEntryLabel(state.activeChartFilters.watched_month),
     });
   }
   return entries;
@@ -166,15 +274,73 @@ function renderActiveChartFilters() {
   });
 }
 
+function renderSearchStatus(draftState, shouldShow) {
+  const { searchStatus } = getElements();
+  if (!searchStatus) return;
+
+  if (!shouldShow || (draftState.kind !== 'chart' && draftState.kind !== 'invalid')) {
+    searchStatus.hidden = true;
+    searchStatus.removeAttribute('data-tone');
+    searchStatus.textContent = '';
+    return;
+  }
+
+  searchStatus.hidden = false;
+  searchStatus.dataset.tone = draftState.kind === 'invalid' ? 'error' : 'hint';
+  searchStatus.textContent = draftState.message;
+}
+
+function submitSearchDraft() {
+  const { searchInput } = getElements();
+  if (!searchInput) return;
+
+  shouldShowDraftVerification = true;
+  const draftState = parseDraftSearch(searchInput.value);
+
+  if (draftState.kind === 'empty') {
+    shouldShowDraftVerification = false;
+    return;
+  }
+
+  if (draftState.kind === 'text') {
+    commitSearchTerm(draftState.term);
+    shouldShowDraftVerification = false;
+    searchInput.value = '';
+    state.currentPage = 1;
+    syncSearchUi();
+    applyFilter();
+    return;
+  }
+
+  if (draftState.kind === 'chart') {
+    shouldShowDraftVerification = false;
+    searchInput.value = '';
+    syncSearchUi();
+    setChartFilter(draftState.filter);
+    return;
+  }
+
+  syncSearchUi();
+}
+
 export function syncSearchUi() {
   const el = getElements();
   if (!el.searchInput || !el.searchClear) return;
 
-  el.searchClear.hidden = el.searchInput.value.trim().length === 0;
+  const draftState = parseDraftSearch(el.searchInput.value);
+  const hasInvalidDraft = shouldShowDraftVerification && draftState.kind === 'invalid';
+  const searchInputWrap = el.searchInput.closest('.search-input-wrap');
+  const hasDraftValue = el.searchInput.value.trim().length > 0;
 
-  const hasDraftSearch = el.searchInput.value.trim().length > 0;
+  el.searchClear.hidden = !hasDraftValue;
+  if (el.searchApply) el.searchApply.hidden = !hasDraftValue;
+  el.searchInput.setAttribute('aria-invalid', hasInvalidDraft ? 'true' : 'false');
+  searchInputWrap?.classList.toggle('search-input-wrap--has-apply', hasDraftValue);
+  searchInputWrap?.classList.toggle('search-input-wrap--invalid', hasInvalidDraft);
+  renderSearchStatus(draftState, shouldShowDraftVerification);
+
   const hasCommittedSearch = state.committedSearchTerms.length > 0;
-  const hasSearch = hasDraftSearch || hasCommittedSearch;
+  const hasSearch = hasCommittedSearch;
   const hasChart = hasActiveChartFilter();
   const hasChartsFilter = hasChartsSectionFilter();
 
@@ -195,13 +361,9 @@ export function syncSearchUi() {
 }
 
 export function applyFilter() {
-  const { searchInput } = getElements();
-  const draft = searchInput ? searchInput.value.trim() : '';
-
   state.filtered = state.allMovies.filter((movie) => {
     const committedMatch = state.committedSearchTerms.every((term) => matchesSearch(movie, term));
-    const draftMatch = draft ? matchesSearch(movie, draft) : true;
-    return committedMatch && draftMatch && matchesChartFilter(movie);
+    return committedMatch && matchesChartFilter(movie);
   });
 
   applySort();
@@ -243,35 +405,30 @@ export function initFilters({ onChange, onChartsRebuild }) {
   onRebuildCharts = onChartsRebuild;
 
   const el = getElements();
-  if (!el.searchInput || !el.searchClear) return;
+  if (!el.searchInput || !el.searchClear || !el.searchApply) return;
 
   if (el.pageSizeSelect) el.pageSizeSelect.value = String(state.pageSize);
 
   el.searchInput.addEventListener('input', () => {
-    state.currentPage = 1;
+    shouldShowDraftVerification = false;
     syncSearchUi();
-    applyFilter();
   });
 
   el.searchInput.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter') return;
 
-    const term = normalizedSearchTerm(el.searchInput.value);
-    if (!term) return;
-
     event.preventDefault();
-    commitSearchTerm(term);
-    el.searchInput.value = '';
-    state.currentPage = 1;
-    syncSearchUi();
-    applyFilter();
+    submitSearchDraft();
   });
 
   el.searchClear.addEventListener('click', () => {
+    shouldShowDraftVerification = false;
     el.searchInput.value = '';
     syncSearchUi();
-    state.currentPage = 1;
-    applyFilter();
+  });
+
+  el.searchApply.addEventListener('click', () => {
+    submitSearchDraft();
   });
 
   if (el.pageSizeSelect) {
@@ -286,6 +443,7 @@ export function initFilters({ onChange, onChartsRebuild }) {
   if (el.activeSearchFilterClear) {
     el.activeSearchFilterClear.addEventListener('click', () => {
       clearCommittedSearchTerms();
+      shouldShowDraftVerification = false;
       el.searchInput.value = '';
       syncSearchUi();
       state.currentPage = 1;

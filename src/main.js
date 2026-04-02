@@ -14,7 +14,6 @@ function getElements() {
   return {
     loadAlert: document.getElementById('loadAlert'),
     loadAlertText: document.getElementById('loadAlertText'),
-    searchInput: document.getElementById('searchInput'),
   };
 }
 
@@ -40,18 +39,16 @@ function renderDashboard() {
 }
 
 function updateMovies(movies, alertMessage) {
-  const { searchInput } = getElements();
   setLoadAlert(alertMessage);
   state.allMovies = movies;
   state.scoreChartDrilldown = null;
   state.watchPeriodChartDrilldown = null;
   syncSearchUi();
 
-  const hasDraftSearch = !!searchInput?.value.trim();
   const hasCommittedSearch = state.committedSearchTerms.length > 0;
   const hasChartFilter = Object.keys(state.activeChartFilters).length > 0;
 
-  if (hasDraftSearch || hasCommittedSearch || hasChartFilter) {
+  if (hasCommittedSearch || hasChartFilter) {
     renderStats();
     renderCharts();
     state.currentPage = 1;
