@@ -1,4 +1,5 @@
 // Table sorting state and header interactions.
+import { DEFAULT_SORT_RULES } from '../constants.js';
 import { state } from '../state.js';
 
 let onSortChange = () => {};
@@ -7,8 +8,25 @@ function getSortHeaders() {
   return Array.from(document.querySelectorAll('th.sortable'));
 }
 
+function defaultSortRules() {
+  return DEFAULT_SORT_RULES.map((rule) => ({ ...rule }));
+}
+
+function effectiveSortRules() {
+  const rules = state.sortRules.map((rule) => ({ ...rule }));
+  const hasReviewSort = rules.some((rule) => rule.col === 'review_link');
+  if (!hasReviewSort) return rules;
+
+  const defaultRules = defaultSortRules().filter(
+    (defaultRule) => !rules.some((rule) => rule.col === defaultRule.col)
+  );
+  return [...rules, ...defaultRules];
+}
+
 function nextSortDir(dir) {
-  return dir === 'asc' ? 'desc' : 'asc';
+  if (dir === 'desc') return 'asc';
+  if (dir === 'asc') return null;
+  return 'desc';
 }
 
 function findSortRuleIndex(col) {
@@ -18,23 +36,31 @@ function findSortRuleIndex(col) {
 function setSingleSortRule(col) {
   const idx = findSortRuleIndex(col);
   if (idx === 0) {
-    state.sortRules = [{ col, dir: nextSortDir(state.sortRules[0].dir) }];
+    const nextDir = nextSortDir(state.sortRules[0].dir);
+    state.sortRules = nextDir ? [{ col, dir: nextDir }] : defaultSortRules();
     return;
   }
 
   const existing = idx >= 0 ? state.sortRules[idx] : null;
-  state.sortRules = [{ col, dir: existing ? existing.dir : 'asc' }];
+  state.sortRules = [{ col, dir: existing ? existing.dir : 'desc' }];
 }
 
 function extendSortRules(col) {
   const idx = findSortRuleIndex(col);
   if (idx === -1) {
-    state.sortRules = [...state.sortRules, { col, dir: 'asc' }];
+    state.sortRules = [...state.sortRules, { col, dir: 'desc' }];
+    return;
+  }
+
+  const nextDir = nextSortDir(state.sortRules[idx].dir);
+  if (!nextDir) {
+    const updated = state.sortRules.filter((_, ruleIdx) => ruleIdx !== idx);
+    state.sortRules = updated.length ? updated : defaultSortRules();
     return;
   }
 
   const updated = state.sortRules.slice();
-  updated[idx] = { col, dir: nextSortDir(updated[idx].dir) };
+  updated[idx] = { col, dir: nextDir };
   state.sortRules = updated;
 }
 
@@ -50,17 +76,18 @@ function sortKey(movie, col) {
   }
 
   if (col === 'review_link') {
-    if (movie.review_link) return '0|' + String(movie.review_link).toLowerCase();
-    if (movie.notes) return '1|' + String(movie.notes).toLowerCase();
-    return null;
+    return movie.review_link ? 1 : 0;
   }
 
   return value === '' || value === undefined ? null : value;
 }
 
 export function applySort() {
+  const originalOrder = new Map(state.allMovies.map((movie, idx) => [movie, idx]));
+  const rules = effectiveSortRules();
+
   state.filtered.sort((a, b) => {
-    for (const rule of state.sortRules) {
+    for (const rule of rules) {
       const av = sortKey(a, rule.col);
       const bv = sortKey(b, rule.col);
       const aNullish = av === null || av === '';
@@ -83,7 +110,7 @@ export function applySort() {
       if (diff !== 0) return diff;
     }
 
-    return 0;
+    return (originalOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (originalOrder.get(b) ?? Number.MAX_SAFE_INTEGER);
   });
 }
 
@@ -105,7 +132,10 @@ export function initSort({ onChange }) {
   onSortChange = onChange;
 
   getSortHeaders().forEach((th) => {
-    th.title = 'Click to sort. Shift-click to add another sort.';
+    th.title =
+      th.dataset.col === 'review_link'
+        ? 'Click to group reviewed vs not reviewed, then flip the groups, then reset to watched latest. Watched date breaks ties by default.'
+        : 'Click to sort descending, then ascending, then reset to watched latest. Shift-click to add another sort.';
     th.addEventListener('click', (event) => {
       const col = th.dataset.col;
       if (!col) return;
