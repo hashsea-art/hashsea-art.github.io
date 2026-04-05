@@ -233,23 +233,23 @@
     <div class="stats-grid">
       <article class="stat-card">
         <span class="stat-eyebrow">Films watched</span>
-        <span class="stat-number" id="statTotal">127</span>
+        <span class="stat-number" id="statTotal">0</span>
       </article>
       <article class="stat-card">
         <span class="stat-eyebrow">Films rated</span>
-        <span class="stat-number" id="statRated">94</span>
+        <span class="stat-number" id="statRated">0</span>
       </article>
       <article class="stat-card">
         <span class="stat-eyebrow">Films scored</span>
-        <span class="stat-number" id="statScored">88</span>
+        <span class="stat-number" id="statScored">0</span>
       </article>
       <article class="stat-card">
         <span class="stat-eyebrow">Avg score</span>
-        <span class="stat-number" id="statAvg">81.4</span>
+        <span class="stat-number" id="statAvg">0</span>
       </article>
       <article class="stat-card">
         <span class="stat-eyebrow">Films reviewed</span>
-        <span class="stat-number" id="statReviewed">32</span>
+        <span class="stat-number" id="statReviewed">0</span>
       </article>
     </div>
   </section>
@@ -262,8 +262,20 @@
       <article class="chart-card">
         <header class="chart-header">
           <div class="chart-header-row">
-            <h3 class="chart-title" id="scoreChartTitle">Score Distribution</h3>
-            <button type="button" class="chart-back-btn" id="scoreChartBack" hidden>Back</button>
+            <div class="chart-title-wrap">
+              <h3 class="chart-title" id="scoreChartTitle">Score Distribution</h3>
+              <button
+                type="button"
+                class="chart-info-btn"
+                aria-label="Score chart info. Click a specific score to open matching films in the list."
+                data-info="Click a specific score to open matching films in the list."
+              >
+                i
+              </button>
+            </div>
+            <div class="chart-header-actions">
+              <button type="button" class="chart-back-btn" id="scoreChartBack" hidden>Back</button>
+            </div>
           </div>
           <p class="chart-desc" id="scoreChartDesc">Counts in bins of 10 from 1&ndash;100</p>
         </header>
@@ -271,7 +283,19 @@
       </article>
       <article class="chart-card">
         <header class="chart-header">
-          <h3 class="chart-title">Star Rating Distribution</h3>
+          <div class="chart-header-row">
+            <div class="chart-title-wrap">
+              <h3 class="chart-title">Star Rating Distribution</h3>
+              <button
+                type="button"
+                class="chart-info-btn"
+                aria-label="Rating chart info. Click a specific rating to open matching films in the list."
+                data-info="Click a specific rating to open matching films in the list."
+              >
+                i
+              </button>
+            </div>
+          </div>
           <p class="chart-desc">Films per star rating (&frac12;&ndash;5 &starf;)</p>
         </header>
         <div class="chart-body"><canvas id="ratingChart" aria-label="Rating distribution bar chart"></canvas></div>
@@ -280,8 +304,20 @@
     <article class="chart-card chart-card-wide">
       <header class="chart-header">
         <div class="chart-header-row">
-          <h3 class="chart-title" id="watchPeriodChartTitle">Films by Release Decade</h3>
-          <button type="button" class="chart-back-btn" id="watchPeriodChartBack" hidden>Back</button>
+          <div class="chart-title-wrap">
+            <h3 class="chart-title" id="watchPeriodChartTitle">Films by Release Decade</h3>
+            <button
+              type="button"
+              class="chart-info-btn"
+              aria-label="Release chart info. Click a decade to drill down. Click a specific year to open matching films in the list."
+              data-info="Click a decade to drill down. Click a specific year to open matching films in the list."
+            >
+              i
+            </button>
+          </div>
+          <div class="chart-header-actions">
+            <button type="button" class="chart-back-btn" id="watchPeriodChartBack" hidden>Back</button>
+          </div>
         </div>
       </header>
       <div class="chart-body"><canvas id="watchPeriodChart" aria-label="Films by release decade chart"></canvas></div>

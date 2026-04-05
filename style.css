@@ -671,6 +671,18 @@ select:focus-visible {
   justify-content: space-between;
   gap: 1rem;
 }
+.chart-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  min-width: 0;
+}
+.chart-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
 .chart-title {
   font-family: var(--font-body);
   font-size: 1.02rem;
@@ -682,6 +694,93 @@ select:focus-visible {
 #watchPeriodChartTitle {
   text-transform: none;
   letter-spacing: 0.02em;
+}
+.chart-info-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 0.68rem;
+  height: 0.68rem;
+  flex-shrink: 0;
+  border: 1px solid rgba(236, 240, 245, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(214, 225, 235, 0.72);
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.02rem;
+  box-shadow: none;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+}
+.chart-info-btn::before,
+.chart-info-btn::after {
+  position: absolute;
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  z-index: 3;
+}
+.chart-info-btn::before {
+  content: "";
+  top: calc(100% + 0.3rem);
+  left: 50%;
+  border-width: 0.36rem;
+  border-style: solid;
+  border-color: transparent transparent rgba(11, 16, 22, 0.97) transparent;
+  transform: translate(-50%, -0.18rem);
+}
+.chart-info-btn::after {
+  content: attr(data-info);
+  top: calc(100% + 0.62rem);
+  width: min(18rem, calc(100vw - 3rem));
+  padding: 0.62rem 0.72rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.7rem;
+  background: rgba(11, 16, 22, 0.97);
+  box-shadow:
+    0 18px 32px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  color: #d7e5ef;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  transform: translate(-50%, -0.18rem);
+}
+.chart-info-btn:hover,
+.chart-info-btn:focus-visible {
+  border-color: rgba(236, 240, 245, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(233, 246, 255, 0.86);
+}
+.chart-info-btn:hover::before,
+.chart-info-btn:hover::after,
+.chart-info-btn:focus-visible::before,
+.chart-info-btn:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.chart-info-btn:focus-visible {
+  outline: 1px solid rgba(157, 178, 195, 0.45);
+  outline-offset: 1px;
+  border-radius: 0.15rem;
 }
 .chart-back-btn {
   display: inline-flex;
@@ -951,19 +1050,24 @@ select:focus-visible {
   padding: 0;
   border: 1px solid var(--border-subtle);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--ink-2);
+  background: transparent;
+  color: var(--ink-3);
   font-size: 0.82rem;
   line-height: 1;
   cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: none;
   transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 .search-jump-icon {
-  display: block;
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
   line-height: 1;
-  transform: translateY(-0.5px);
 }
 .search-jump-btn:hover {
   color: var(--ink);
@@ -2255,6 +2359,12 @@ body.scoring-guide-open .site-footer {
   }
   .chart-card {
     padding: 1.2rem 1rem 1rem;
+  }
+  .chart-title-wrap {
+    gap: 0.3rem;
+  }
+  .chart-info-btn::after {
+    width: min(15rem, calc(100vw - 2.5rem));
   }
   .chart-body {
     height: 220px;
