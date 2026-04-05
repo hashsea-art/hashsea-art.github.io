@@ -22,6 +22,7 @@ function getElements() {
     scoreChartDesc: document.getElementById('scoreChartDesc'),
     scoreChartBack: document.getElementById('scoreChartBack'),
     watchPeriodChartTitle: document.getElementById('watchPeriodChartTitle'),
+    watchPeriodChartDesc: document.getElementById('watchPeriodChartDesc'),
     watchPeriodChartBack: document.getElementById('watchPeriodChartBack'),
     scoreCanvas: document.getElementById('scoreChart'),
     ratingCanvas: document.getElementById('ratingChart'),
@@ -129,8 +130,13 @@ function getScoreChartState(movies) {
     return {
       labels,
       data,
-      title: 'Score Distribution: ' + state.scoreChartDrilldown.start + '-' + state.scoreChartDrilldown.end,
-      description: 'Exact score counts inside the selected range.',
+      title: 'Score Distribution',
+      description:
+        'Showing ' +
+        state.scoreChartDrilldown.start +
+        '\u2013' +
+        state.scoreChartDrilldown.end +
+        '. Click a score to open matching films.',
       showBackButton: true,
     };
   }
@@ -148,7 +154,7 @@ function getScoreChartState(movies) {
     labels,
     data,
     title: 'Score Distribution',
-    description: 'Counts in bins of 10 from 1\u2013100. Click a bar to drill down.',
+    description: 'Click a range, then click a score to open matching films.',
     showBackButton: false,
   };
 }
@@ -275,6 +281,7 @@ function getWatchPeriodChartState(movies) {
       data: [],
       values: [],
       title: 'Films by Release Decade',
+      description: 'Click a decade, then click a year to open matching films.',
       showBackButton: false,
     };
   }
@@ -304,7 +311,11 @@ function getWatchPeriodChartState(movies) {
       labels,
       data,
       values,
-      title: range.title,
+      title: 'Films by Release Decade',
+      description:
+        'Showing ' +
+        range.title.replace(/^Films Released in the /, '').replace(/^Films Released in /, '') +
+        '. Click a year to open matching films.',
       showBackButton: true,
     };
   }
@@ -350,6 +361,7 @@ function getWatchPeriodChartState(movies) {
     data,
     values,
     title: 'Films by Release Decade',
+    description: 'Click a decade, then click a year to open matching films.',
     showBackButton: false,
   };
 }
@@ -360,6 +372,7 @@ function buildWatchPeriodChart() {
   const chartState = getWatchPeriodChartState(datedMovies);
 
   if (el.watchPeriodChartTitle) el.watchPeriodChartTitle.textContent = chartState.title;
+  if (el.watchPeriodChartDesc) el.watchPeriodChartDesc.textContent = chartState.description || '';
   if (el.watchPeriodChartBack) el.watchPeriodChartBack.hidden = !chartState.showBackButton;
   if (typeof window.Chart === 'undefined' || !el.watchPeriodCanvas) return;
 
