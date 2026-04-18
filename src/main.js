@@ -7,7 +7,7 @@ import { initDetailPanel, openDetail } from './ui/detail.js';
 import { applyFilter, clearChartFilterType, initFilters, setChartFilter, syncSearchUi } from './ui/filters.js';
 import { initHeatmap } from './ui/heatmap.js';
 import { applySort, initSort } from './ui/sort.js';
-import { renderStats } from './ui/stats.js';
+import { initStats, renderStats } from './ui/stats.js';
 import { initTable, renderTable } from './ui/table.js';
 
 function getElements() {
@@ -87,6 +87,7 @@ async function init() {
   initCharts({ setChartFilter });
   initHeatmap({ setChartFilter, clearChartFilterType });
   initSort({ onChange: renderTable });
+  initStats();
   initFilters({ onChange: renderTable, onChartsRebuild: renderCharts });
 
   await loadData();

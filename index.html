@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600;1,8..60,700&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
     crossorigin="anonymous"
     referrerpolicy="strict-origin-when-cross-origin"
@@ -28,14 +28,16 @@
   <div class="masthead-inner">
     <h1 class="masthead-title">Harsh's Film Diary</h1>
     <section class="info-hub" aria-label="About and links">
-      <div class="info-bar" aria-label="About and links">
-        <button type="button" class="info-tab" id="infoTabAboutMe" data-panel="aboutMePanel" aria-controls="aboutMePanel" aria-expanded="false">About Me</button>
-        <button type="button" class="info-tab" id="infoTabDiary" data-panel="aboutDiaryPanel" aria-controls="aboutDiaryPanel" aria-expanded="false">About This Diary</button>
-        <button type="button" class="info-tab" id="infoTabScoring" data-panel="scoringGuidePanel" aria-controls="scoringGuidePanel" aria-expanded="false">Scoring Guide</button>
-        <button type="button" class="info-tab" id="infoTabConnect" data-panel="connectPanel" aria-controls="connectPanel" aria-expanded="false">Connect</button>
+      <div class="info-bar">
+        <div class="info-bar-group">
+          <button type="button" class="info-tab" id="infoTabAboutMe" data-panel="aboutMePanel" aria-controls="aboutMePanel" aria-expanded="false">About Me</button>
+          <button type="button" class="info-tab" id="infoTabDiary" data-panel="aboutDiaryPanel" aria-controls="aboutDiaryPanel" aria-expanded="false">About This Diary</button>
+          <button type="button" class="info-tab" id="infoTabScoring" data-panel="scoringGuidePanel" aria-controls="scoringGuidePanel" aria-expanded="false">Scoring Guide</button>
+          <button type="button" class="info-tab" id="infoTabConnect" data-panel="connectPanel" aria-controls="connectPanel" aria-expanded="false">Connect</button>
+        </div>
       </div>
 
-      <div class="info-panels">
+      <div class="info-panels" hidden>
         <section class="info-panel-content" id="aboutMePanel" hidden>
           <p class="info-panel-text info-panel-placeholder">A short note about me will go here once I add the text.</p>
         </section>
@@ -231,23 +233,23 @@
   <section class="section" aria-labelledby="stats-heading">
     <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
     <div class="stats-grid">
-      <article class="stat-card">
+      <article class="stat-card stat-card--interactive" id="statCardWatched" data-stat-action="jump-watch-period-chart" role="button" tabindex="0" aria-label="Jump to the films by release decade chart" aria-controls="watchPeriodChartTitle">
         <span class="stat-eyebrow">Films watched</span>
         <span class="stat-number" id="statTotal">0</span>
       </article>
-      <article class="stat-card">
+      <article class="stat-card stat-card--interactive" id="statCardRated" data-stat-action="jump-charts" role="button" tabindex="0" aria-label="Jump to the charts section" aria-controls="chartsAnchor">
         <span class="stat-eyebrow">Films rated</span>
         <span class="stat-number" id="statRated">0</span>
       </article>
-      <article class="stat-card">
+      <article class="stat-card stat-card--interactive" id="statCardScored" data-stat-action="jump-films" role="button" tabindex="0" aria-label="Jump to the films section" aria-controls="filmsSection">
         <span class="stat-eyebrow">Films scored</span>
         <span class="stat-number" id="statScored">0</span>
       </article>
-      <article class="stat-card">
+      <article class="stat-card stat-card--interactive" id="statCardAvg" data-stat-action="open-panel" data-stat-panel="scoringGuidePanel" role="button" tabindex="0" aria-label="Open the scoring guide" aria-controls="scoringGuidePanel">
         <span class="stat-eyebrow">Avg score</span>
         <span class="stat-number" id="statAvg">0</span>
       </article>
-      <article class="stat-card">
+      <article class="stat-card stat-card--interactive" id="statCardReviewed" data-stat-action="external" data-stat-url="https://letterboxd.com/hashsea/reviews/" role="link" tabindex="0" aria-label="Open films reviewed on Letterboxd in a new tab">
         <span class="stat-eyebrow">Films reviewed</span>
         <span class="stat-number" id="statReviewed">0</span>
       </article>

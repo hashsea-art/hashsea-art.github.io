@@ -109,7 +109,7 @@ function tooltipCfg() {
         const values = Array.isArray(context.dataset?.data) ? context.dataset.data : [];
         const total = values.reduce((sum, value) => sum + (Number(value) || 0), 0);
         const pct = total > 0 ? formatPct((count / total) * 100) : '0';
-        return count + ' film' + (count === 1 ? '' : 's') + ' · ' + pct + '%';
+        return count + ' film' + (count === 1 ? '' : 's') + ' \u00b7 ' + pct + '%';
       },
     },
   };
