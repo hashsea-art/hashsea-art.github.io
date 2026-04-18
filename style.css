@@ -2252,29 +2252,23 @@ body.scoring-guide-open .site-footer {
   .info-bar-group {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0;
+    gap: 1px;
     flex: 1 1 auto;
-    background: transparent;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
     box-shadow: none;
   }
   .info-bar-group::before,
   .info-bar-group::after,
-  .info-tab::after {
+  .info-tab::after,
+  .info-tab:not(:last-child)::after {
     content: none;
   }
   .info-tab {
-    border-right: none;
-    border-bottom: none;
     font-size: 0.73rem;
     letter-spacing: 0.045em;
     padding: 0.68rem 0.32rem 0.56rem;
-    background: transparent;
-  }
-  .info-bar-group > :nth-child(odd) {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  .info-bar-group > :nth-child(-n + 2) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, rgba(20, 25, 31, 0.98) 0%, rgba(14, 18, 23, 0.98) 100%);
   }
   .info-panel-content {
     padding: 0.95rem 0.95rem 1rem;
@@ -2488,7 +2482,7 @@ body.scoring-guide-open .site-footer {
     --info-inline-pad: 1rem;
   }
   .info-bar {
-    padding: 0 var(--info-inline-pad);
+    padding: 0;
   }
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
