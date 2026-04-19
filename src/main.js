@@ -5,7 +5,7 @@ import { initBackToTopLink, initInfoHub } from './ui/chrome.js';
 import { initCharts, renderCharts } from './ui/charts.js';
 import { initDetailPanel, openDetail } from './ui/detail.js';
 import { applyFilter, clearChartFilterType, initFilters, setChartFilter, syncSearchUi } from './ui/filters.js';
-import { initHeatmap } from './ui/heatmap.js';
+import { initHeatmap, renderMonthHeatmap } from './ui/heatmap.js';
 import { applySort, initSort } from './ui/sort.js';
 import { initStats, renderStats } from './ui/stats.js';
 import { initTable, renderTable } from './ui/table.js';
@@ -34,6 +34,7 @@ function setLoadAlert(message) {
 function renderDashboard() {
   renderStats();
   renderCharts();
+  renderMonthHeatmap();
   state.currentPage = 1;
   renderTable();
 }

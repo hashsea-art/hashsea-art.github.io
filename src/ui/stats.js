@@ -81,7 +81,10 @@ function runStatCardAction(card) {
     if (opened) {
       document.querySelector('.info-hub')?.scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
     }
+    return;
   }
+
+  console.warn("[cinelog] Unknown stat card action: '" + action + "'");
 }
 
 export function initStats() {

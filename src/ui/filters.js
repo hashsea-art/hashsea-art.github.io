@@ -3,6 +3,7 @@ import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, MONTH_LABELS, RATING_STEPS } from
 import { state } from '../state.js';
 import { getMovieHeatmapDate, getMovieReleaseYear, monthHeatmapKey } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
+import { renderMonthHeatmap } from './heatmap.js';
 import { applySort } from './sort.js';
 
 let onResultsChange = () => {};
@@ -367,6 +368,7 @@ export function applyFilter() {
   });
 
   applySort();
+  renderMonthHeatmap();
   onResultsChange();
 }
 

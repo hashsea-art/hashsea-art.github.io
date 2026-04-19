@@ -4,7 +4,6 @@ import { getLoggedWatchHistory, getWatchHistory, watchTimelineLabel } from '../m
 import { makeEl } from '../utils/dom.js';
 import { fmtDate, fmtNotesCell, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
 import { chartFilterLabel } from './filters.js';
-import { renderMonthHeatmap } from './heatmap.js';
 import { syncSortUI } from './sort.js';
 
 let onOpenDetail = () => {};
@@ -183,12 +182,18 @@ function createTableRowElement(movie, idx) {
 }
 
 function attachRowHandlers(tbody, resolveMovie) {
-  tbody.querySelectorAll('tr').forEach((tr) => {
-    const open = () => onOpenDetail(resolveMovie(+tr.dataset.idx));
-    tr.addEventListener('click', open);
-    tr.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') open();
-    });
+  tbody.addEventListener('click', (event) => {
+    const tr = event.target.closest('tr');
+    if (!tr) return;
+    const movie = resolveMovie(+tr.dataset.idx);
+    if (movie) onOpenDetail(movie);
+  });
+  tbody.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const tr = event.target.closest('tr');
+    if (!tr) return;
+    const movie = resolveMovie(+tr.dataset.idx);
+    if (movie) onOpenDetail(movie);
   });
 }
 
@@ -332,7 +337,6 @@ export function renderTable() {
   const page = state.filtered.slice(start, start + state.pageSize);
 
   renderTableCount(total);
-  renderMonthHeatmap();
 
   if (!total) {
     renderEmptyTableState();
@@ -350,11 +354,12 @@ export function renderTable() {
   });
   el.tableBody.appendChild(fragment);
 
-  attachRowHandlers(el.tableBody, (idx) => state.filtered[idx]);
   syncSortUI();
   renderPagination(total);
 }
 
 export function initTable({ openDetail }) {
   onOpenDetail = openDetail;
+  const { tableBody } = getElements();
+  if (tableBody) attachRowHandlers(tableBody, (idx) => state.filtered[idx]);
 }
