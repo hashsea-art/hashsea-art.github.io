@@ -2198,21 +2198,19 @@ body.scoring-guide-open .site-footer {
     background-attachment: scroll, scroll;
   }
   .masthead {
-    padding-top: 3.4rem;
-    padding-bottom: 4.55rem;
-  }
-  .masthead-inner {
-    gap: 1rem;
+    padding-top: 2.2rem;
+    padding-bottom: 6.8rem;
   }
   .dashboard {
     padding-top: 1.75rem;
   }
   .masthead-title {
-    font-size: clamp(2.1rem, 9.4vw, 3.15rem);
+    font-size: clamp(1.85rem, 7.9vw, 2.8rem);
     line-height: 1;
-    white-space: normal;
-    letter-spacing: 0.1em;
-    transform: translateY(-6%);
+    max-width: 100%;
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+    transform: none;
   }
   .info-hub {
     width: 100%;
@@ -2243,7 +2241,7 @@ body.scoring-guide-open .site-footer {
     padding: 0 1rem 1.8rem;
   }
   .site-footer-inner {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: 0.6rem;
   }
@@ -2252,7 +2250,8 @@ body.scoring-guide-open .site-footer {
     text-align: left;
   }
   .site-footer-rights {
-    justify-self: end;
+    justify-self: center;
+    text-align: center;
   }
   .site-footer-link {
     justify-self: end;
@@ -2454,7 +2453,7 @@ body.scoring-guide-open .site-footer {
   }
   .masthead-title {
     letter-spacing: 0.08em;
-    transform: translateY(-4%);
+    font-size: clamp(1.6rem, 7.2vw, 2.2rem);
   }
   .stat-number {
     font-size: 1.9rem;
