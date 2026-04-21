@@ -1,8 +1,15 @@
 # Harsh's Film Diary
 
-A static personal film diary site built for GitHub Pages.
+A personal film diary. Tracks films I've watched and serves as a richer stats companion to my Letterboxd profile.
 
-The site reads diary data from `data/movies.csv` and renders stats, charts, filters, a watch heatmap, and a film table entirely in the browser. The frontend is organized into small ES modules under `src/` so the project stays manageable as it grows.
+## How It Works
+
+- `data/movies.csv` is fetched and parsed on page load
+- Movie records are normalized and loaded into shared app state
+- Stats, charts, and the heatmap are rendered from that state
+- The film table populates with sorting and filter controls
+- Selecting a film opens a detail panel with full info
+- All filtering, sorting, and navigation happens client-side — no reloads
 
 ## Structure
 
@@ -30,21 +37,6 @@ Recommended setup with VS Code:
 4. Choose `Open with Live Server`.
 
 This should open a local URL such as `http://127.0.0.1:5500/`.
-
-## GitHub Pages
-
-This project is set up to work as a static GitHub Pages site:
-
-- assets use relative paths
-- the app runs fully in the browser
-- `src/main.js` loads as an ES module
-- diary data is read from `data/movies.csv`
-
-## Data
-
-- Edit `data/movies.csv` as the main source of truth.
-- Keep the CSV available alongside the site when deploying.
-- If the CSV cannot be loaded, the page shows a load warning instead of fallback sample data.
 
 ## License
 
