@@ -105,7 +105,7 @@ function watchTimeValue(date, fallbackIdx) {
   return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER - 100000 + fallbackIdx;
 }
 
-function buildMovieFromEntries(entries) {
+function buildMoviesFromEntries(entries) {
   const ordered = [...entries].sort(
     (a, b) => watchTimeValue(a.date_watched, a._idx) - watchTimeValue(b.date_watched, b._idx)
   );
@@ -121,42 +121,68 @@ function buildMovieFromEntries(entries) {
     review_link: entry.review_link,
   }));
 
-  const latest = watches[watches.length - 1];
   const first = watches[0];
-  const latestReviewedWatch = [...watches].reverse().find(
-    (watch) => watch.review_link && String(watch.review_link).trim()
-  );
   const rewatchCount = watches.filter((watch) => watch.rewatch).length;
   const scoreHistory = watches
     .filter((watch) => watch.score !== null)
     .map((watch) => ({ score: watch.score, date_watched: watch.date_watched }));
 
-  if (
-    scoreHistory.length <= 1 &&
-    latest.previous_score !== null &&
-    latest.previous_score !== latest.score
-  ) {
-    scoreHistory.unshift({ score: latest.previous_score, date_watched: '' });
+  const datedWatches = watches.filter((w) => w.date_watched && String(w.date_watched).trim());
+
+  // Single or no dated entry: original single-row behavior
+  if (datedWatches.length <= 1) {
+    const latest = watches[watches.length - 1];
+    const latestReviewedWatch = [...watches].reverse().find(
+      (watch) => watch.review_link && String(watch.review_link).trim()
+    );
+    const adjustedHistory = [...scoreHistory];
+    if (
+      adjustedHistory.length <= 1 &&
+      latest.previous_score !== null &&
+      latest.previous_score !== latest.score
+    ) {
+      adjustedHistory.unshift({ score: latest.previous_score, date_watched: '' });
+    }
+    return [{
+      movie: latest.movie,
+      year: latest.year,
+      rating: latest.rating,
+      score: latest.score,
+      date_watched: latest.date_watched,
+      first_watched: first.date_watched,
+      has_rewatch: rewatchCount > 0,
+      rewatch_count: rewatchCount,
+      previous_score:
+        adjustedHistory.length >= 2
+          ? adjustedHistory[adjustedHistory.length - 2].score
+          : latest.previous_score,
+      notes: latest.notes,
+      review_link: latestReviewedWatch ? latestReviewedWatch.review_link : latest.review_link,
+      watch_history: watches,
+      score_history: adjustedHistory,
+    }];
   }
 
-  return {
-    movie: latest.movie,
-    year: latest.year,
-    rating: latest.rating,
-    score: latest.score,
-    date_watched: latest.date_watched,
-    first_watched: first.date_watched,
-    has_rewatch: rewatchCount > 0,
-    rewatch_count: rewatchCount,
-    previous_score:
-      scoreHistory.length >= 2
-        ? scoreHistory[scoreHistory.length - 2].score
-        : latest.previous_score,
-    notes: latest.notes,
-    review_link: latestReviewedWatch ? latestReviewedWatch.review_link : latest.review_link,
-    watch_history: watches,
-    score_history: scoreHistory,
-  };
+  // Multiple dated entries: one row per dated entry
+  return datedWatches.map((watch) => {
+    const watchIdx = watches.indexOf(watch);
+    const prevWatch = watchIdx > 0 ? watches[watchIdx - 1] : null;
+    return {
+      movie: watch.movie,
+      year: watch.year,
+      rating: watch.rating,
+      score: watch.score,
+      date_watched: watch.date_watched,
+      first_watched: first.date_watched,
+      has_rewatch: watch.rewatch,
+      rewatch_count: rewatchCount,
+      previous_score: prevWatch ? (prevWatch.score ?? null) : null,
+      notes: watch.notes,
+      review_link: watch.review_link || '',
+      watch_history: watches,
+      score_history: scoreHistory,
+    };
+  });
 }
 
 export function normaliseRows(rows) {
@@ -186,5 +212,5 @@ export function normaliseRows(rows) {
     grouped.get(key).push(entry);
   });
 
-  return Array.from(grouped.values()).map(buildMovieFromEntries);
+  return Array.from(grouped.values()).flatMap(buildMoviesFromEntries);
 }

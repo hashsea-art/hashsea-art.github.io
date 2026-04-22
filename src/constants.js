@@ -1,4 +1,3 @@
-// Shared app constants: data paths, chart theme values, and app defaults.
 export const CSV_PATH = './data/movies.csv';
 
 export const DEFAULT_PAGE_SIZE = 20;
@@ -31,7 +30,7 @@ export const COL_ALIASES = {
   rating: ['rating', 'stars', 'star_rating', 'letterboxd_rating'],
   rewatch: ['rewatch', 're_watch', 'rewatched'],
   score: ['score', 'my_score', 'points', 'grade', 'numeric_score'],
-  date_watched: ['date_watched', 'watched', 'watch_date', 'date', 'viewed_on'],
+  date_watched: ['date_watched', 'watched_date', 'watched', 'watch_date', 'date', 'viewed_on'],
   previous_score: ['previous_score', 'prev_score', 'old_score', 'previous', 'last_score'],
   notes: ['notes', 'note', 'comment', 'memo'],
   review_link: ['review_link', 'review_url', 'review_uri', 'letterboxd_uri', 'uri'],

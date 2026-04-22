@@ -1,6 +1,6 @@
 // Stats card rendering for the dashboard summary section.
 import { state } from '../state.js';
-import { getWatchEntries, getWatchHistory } from '../movies.js';
+import { getWatchHistory } from '../movies.js';
 import { openInfoPanel } from './chrome.js';
 
 function getElements() {
@@ -103,6 +103,15 @@ export function initStats() {
   });
 }
 
+function uniqueAllMovies() {
+  const seen = new Set();
+  return state.allMovies.filter((m) => {
+    if (seen.has(m.watch_history)) return false;
+    seen.add(m.watch_history);
+    return true;
+  });
+}
+
 export function renderStats() {
   const el = getElements();
   if (!el.statTotal) return;
@@ -116,15 +125,17 @@ export function renderStats() {
     return;
   }
 
-  const watches = getWatchEntries(state.allMovies);
-  const total = state.allMovies.length;
-  const rated = state.allMovies.filter((movie) => movie.rating !== null).length;
-  const scored = state.allMovies.filter((movie) => movie.score !== null).length;
-  const reviewed = state.allMovies.filter((movie) =>
-    getWatchHistory(movie).some((watch) => !!watch.review_link)
-  ).length;
-  const scores = watches.map((movie) => movie.score).filter((score) => score !== null);
-  const avg = scores.length ? (scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(1) : '0';
+  const unique = uniqueAllMovies();
+  const total = unique.length;
+  const rated = unique.filter((m) => getWatchHistory(m).some((w) => w.rating !== null)).length;
+  const scored = unique.filter((m) => getWatchHistory(m).some((w) => w.score !== null)).length;
+  const reviewed = unique.filter((m) => getWatchHistory(m).some((w) => !!w.review_link)).length;
+  const latestScores = unique
+    .map((m) => [...getWatchHistory(m)].reverse().find((w) => w.score !== null)?.score ?? null)
+    .filter((s) => s !== null);
+  const avg = latestScores.length
+    ? (latestScores.reduce((sum, s) => sum + s, 0) / latestScores.length).toFixed(1)
+    : '0';
 
   el.statTotal.textContent = String(total);
   el.statRated.textContent = String(rated);

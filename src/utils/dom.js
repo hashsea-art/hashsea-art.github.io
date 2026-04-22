@@ -1,4 +1,4 @@
-// Small DOM helpers used across UI modules.
+// Small DOM helper used across UI modules.
 export function makeEl(tag, className, text) {
   const el = document.createElement(tag);
   if (className) el.className = className;

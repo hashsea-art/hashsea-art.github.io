@@ -112,7 +112,9 @@ function buildEntryPreviewMeta(chronological, reversed, entry, idx) {
 
 function createDiaryPreviewElement(movie) {
   const history = getWatchHistory(movie);
-  if (history.length <= 1) return null;
+  const datedHistory = history.filter((w) => w.date_watched && String(w.date_watched).trim());
+  // Suppress popover when each dated entry is already its own row in the table
+  if (history.length <= 1 || datedHistory.length > 1) return null;
 
   const chronological = history.slice();
   const reversed = chronological.slice().reverse();
@@ -197,15 +199,22 @@ function attachRowHandlers(tbody, resolveMovie) {
   });
 }
 
-function filteredDiaryEntryCount() {
-  return state.filtered.reduce((count, movie) => count + getLoggedWatchHistory(movie).length, 0);
+function uniqueFilteredFilms() {
+  const seen = new Set();
+  return state.filtered.filter((m) => {
+    if (seen.has(m.watch_history)) return false;
+    seen.add(m.watch_history);
+    return true;
+  });
 }
 
-function tableCountParts(total) {
-  const diaryEntries = filteredDiaryEntryCount();
-  const filmWord = 'film' + (total !== 1 ? 's' : '');
+function tableCountParts() {
+  const unique = uniqueFilteredFilms();
+  const filmCount = unique.length;
+  const diaryEntries = unique.reduce((count, movie) => count + getLoggedWatchHistory(movie).length, 0);
+  const filmWord = 'film' + (filmCount !== 1 ? 's' : '');
   const activeChartLabel = chartFilterLabel();
-  const main = total + ' ' + filmWord + (activeChartLabel ? ' matching ' + activeChartLabel : '');
+  const main = filmCount + ' ' + filmWord + (activeChartLabel ? ' matching ' + activeChartLabel : '');
 
   return {
     main,
@@ -213,11 +222,11 @@ function tableCountParts(total) {
   };
 }
 
-function renderTableCount(total) {
+function renderTableCount() {
   const { searchCount } = getElements();
   if (!searchCount) return;
 
-  const parts = tableCountParts(total);
+  const parts = tableCountParts();
   searchCount.textContent = '';
   const main = makeEl('span', 'search-count-main', parts.main);
   const sep = makeEl('span', 'search-count-sep', '\u00b7');
@@ -336,7 +345,7 @@ export function renderTable() {
   const start = (state.currentPage - 1) * state.pageSize;
   const page = state.filtered.slice(start, start + state.pageSize);
 
-  renderTableCount(total);
+  renderTableCount();
 
   if (!total) {
     renderEmptyTableState();

@@ -1,4 +1,4 @@
-// App entrypoint: initializes UI modules, loads data, and coordinates top-level rendering.
+// Entrypoint: initializes UI modules, loads data, and coordinates top-level rendering.
 import { loadMoviesData } from './data/loader.js';
 import { state } from './state.js';
 import { initBackToTopLink, initInfoHub } from './ui/chrome.js';
