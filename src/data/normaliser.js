@@ -135,14 +135,6 @@ function buildMoviesFromEntries(entries) {
     const latestReviewedWatch = [...watches].reverse().find(
       (watch) => watch.review_link && String(watch.review_link).trim()
     );
-    const adjustedHistory = [...scoreHistory];
-    if (
-      adjustedHistory.length <= 1 &&
-      latest.previous_score !== null &&
-      latest.previous_score !== latest.score
-    ) {
-      adjustedHistory.unshift({ score: latest.previous_score, date_watched: '' });
-    }
     return [{
       movie: latest.movie,
       year: latest.year,
@@ -152,21 +144,16 @@ function buildMoviesFromEntries(entries) {
       first_watched: first.date_watched,
       has_rewatch: rewatchCount > 0,
       rewatch_count: rewatchCount,
-      previous_score:
-        adjustedHistory.length >= 2
-          ? adjustedHistory[adjustedHistory.length - 2].score
-          : latest.previous_score,
+      previous_score: latest.previous_score,
       notes: latest.notes,
       review_link: latestReviewedWatch ? latestReviewedWatch.review_link : latest.review_link,
       watch_history: watches,
-      score_history: adjustedHistory,
+      score_history: scoreHistory,
     }];
   }
 
   // Multiple dated entries: one row per dated entry
   return datedWatches.map((watch) => {
-    const watchIdx = watches.indexOf(watch);
-    const prevWatch = watchIdx > 0 ? watches[watchIdx - 1] : null;
     return {
       movie: watch.movie,
       year: watch.year,
@@ -176,7 +163,7 @@ function buildMoviesFromEntries(entries) {
       first_watched: first.date_watched,
       has_rewatch: watch.rewatch,
       rewatch_count: rewatchCount,
-      previous_score: prevWatch ? (prevWatch.score ?? null) : null,
+      previous_score: watch.previous_score,
       notes: watch.notes,
       review_link: watch.review_link || '',
       watch_history: watches,

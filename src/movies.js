@@ -77,3 +77,13 @@ export function watchTimelineLabel(watches, watch, idx) {
   if (idx === watches.length - 1) return watch.rewatch ? 'Rewatch' : 'First watch';
   return 'Rewatch';
 }
+
+export function latestByFilmMap(movies) {
+  const map = new Map();
+  for (const movie of movies) {
+    const key = `${movie.movie}|${movie.year}`;
+    const existing = map.get(key);
+    if (!existing || movie.date_watched > existing.date_watched) map.set(key, movie);
+  }
+  return map;
+}

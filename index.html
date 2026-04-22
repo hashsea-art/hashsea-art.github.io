@@ -233,15 +233,19 @@
   <section class="section" aria-labelledby="stats-heading">
     <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
     <div class="stats-grid">
-      <article class="stat-card stat-card--interactive" id="statCardWatched" data-stat-action="jump-watch-period-chart" role="button" tabindex="0" aria-label="Jump to the films by release decade chart" aria-controls="watchPeriodChartTitle">
+      <article class="stat-card stat-card--interactive" id="statCardWatched" data-stat-action="jump-watch-period-chart" data-stat-chart="watchPeriodChart" role="button" tabindex="0" aria-label="Jump to the films by release decade chart" aria-controls="watchPeriodChartTitle">
         <span class="stat-eyebrow">Films watched</span>
         <span class="stat-number" id="statTotal">0</span>
       </article>
-      <article class="stat-card stat-card--interactive" id="statCardRated" data-stat-action="jump-charts" role="button" tabindex="0" aria-label="Jump to the charts section" aria-controls="chartsAnchor">
+      <article class="stat-card stat-card--interactive" id="statCardRated" data-stat-action="jump-charts" data-stat-chart="ratingChart" role="button" tabindex="0" aria-label="Jump to the charts section" aria-controls="chartsAnchor">
         <span class="stat-eyebrow">Films rated</span>
         <span class="stat-number" id="statRated">0</span>
       </article>
-      <article class="stat-card stat-card--interactive" id="statCardScored" data-stat-action="jump-films" role="button" tabindex="0" aria-label="Jump to the films section" aria-controls="filmsSection">
+      <article class="stat-card stat-card--interactive" id="statCardLogged" data-stat-action="jump-films" role="button" tabindex="0" aria-label="Jump to the films list" aria-controls="filmsSection">
+        <span class="stat-eyebrow">Films logged</span>
+        <span class="stat-number" id="statLogged">0</span>
+      </article>
+      <article class="stat-card stat-card--interactive" id="statCardScored" data-stat-action="jump-charts" data-stat-chart="scoreChart" role="button" tabindex="0" aria-label="Jump to the charts section" aria-controls="chartsAnchor">
         <span class="stat-eyebrow">Films scored</span>
         <span class="stat-number" id="statScored">0</span>
       </article>

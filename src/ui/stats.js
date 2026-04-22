@@ -7,6 +7,7 @@ function getElements() {
   return {
     statCards: Array.from(document.querySelectorAll('.stat-card--interactive')),
     statTotal: document.getElementById('statTotal'),
+    statLogged: document.getElementById('statLogged'),
     statRated: document.getElementById('statRated'),
     statScored: document.getElementById('statScored'),
     statAvg: document.getElementById('statAvg'),
@@ -40,6 +41,17 @@ function scrollToElementWithOffset(target, offset = 0) {
   window.scrollTo({ top, behavior: getScrollBehavior() });
 }
 
+function highlightChartCard(canvasId) {
+  if (!canvasId) return;
+  const canvas = document.getElementById(canvasId);
+  const card = canvas?.closest('.chart-card');
+  if (!card) return;
+  card.classList.remove('chart-card--highlight');
+  void card.offsetWidth;
+  card.classList.add('chart-card--highlight');
+  setTimeout(() => card.classList.remove('chart-card--highlight'), 1000);
+}
+
 function scrollToChartsSection() {
   const { chartsAnchor } = getElements();
   chartsAnchor?.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
@@ -67,11 +79,13 @@ function runStatCardAction(card) {
 
   if (action === 'jump-charts') {
     scrollToChartsSection();
+    highlightChartCard(card.dataset.statChart);
     return;
   }
 
   if (action === 'jump-watch-period-chart') {
     scrollToWatchPeriodChart();
+    highlightChartCard(card.dataset.statChart);
     return;
   }
 
@@ -118,6 +132,7 @@ export function renderStats() {
 
   if (!state.allMovies.length) {
     el.statTotal.textContent = '0';
+    el.statLogged.textContent = '0';
     el.statRated.textContent = '0';
     el.statScored.textContent = '0';
     el.statAvg.textContent = '0';
@@ -138,6 +153,8 @@ export function renderStats() {
     : '0';
 
   el.statTotal.textContent = String(total);
+  const logged = unique.filter((m) => getWatchHistory(m).some((w) => w.date_watched && String(w.date_watched).trim())).length;
+  el.statLogged.textContent = String(logged);
   el.statRated.textContent = String(rated);
   el.statScored.textContent = String(scored);
   el.statAvg.textContent = avg;

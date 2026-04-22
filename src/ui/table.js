@@ -1,12 +1,13 @@
 // Film table rendering, pagination, and row-level interactions.
 import { state } from '../state.js';
-import { getLoggedWatchHistory, getWatchHistory, watchTimelineLabel } from '../movies.js';
+import { getLoggedWatchHistory, getMovieHeatmapDate, getWatchHistory, monthHeatmapKey, watchTimelineLabel } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
 import { fmtDate, fmtNotesCell, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
 import { chartFilterLabel } from './filters.js';
 import { syncSortUI } from './sort.js';
 
 let onOpenDetail = () => {};
+let _currentRows = [];
 
 function getElements() {
   return {
@@ -112,9 +113,7 @@ function buildEntryPreviewMeta(chronological, reversed, entry, idx) {
 
 function createDiaryPreviewElement(movie) {
   const history = getWatchHistory(movie);
-  const datedHistory = history.filter((w) => w.date_watched && String(w.date_watched).trim());
-  // Suppress popover when each dated entry is already its own row in the table
-  if (history.length <= 1 || datedHistory.length > 1) return null;
+  if (history.length <= 1) return null;
 
   const chronological = history.slice();
   const reversed = chronological.slice().reverse();
@@ -177,7 +176,6 @@ function createTableRowElement(movie, idx) {
 
   const notesCell = makeEl('td', 'notes-cell');
   notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link));
-  notesCell.title = movie.notes || (movie.review_link ? 'Open Letterboxd review' : '');
   tr.appendChild(notesCell);
 
   return tr;
@@ -199,6 +197,31 @@ function attachRowHandlers(tbody, resolveMovie) {
   });
 }
 
+function isFilterActive() {
+  return state.committedSearchTerms.length > 0 || Object.keys(state.activeChartFilters).length > 0;
+}
+
+function collapseToLatestPerFilm(movies) {
+  const latestMap = new Map();
+  for (const movie of movies) {
+    const key = movie.watch_history;
+    const existing = latestMap.get(key);
+    if (!existing || (movie.date_watched || '') > (existing.date_watched || '')) {
+      latestMap.set(key, movie);
+    }
+  }
+  const seen = new Set();
+  const result = [];
+  for (const movie of movies) {
+    const key = movie.watch_history;
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(latestMap.get(key));
+    }
+  }
+  return result;
+}
+
 function uniqueFilteredFilms() {
   const seen = new Set();
   return state.filtered.filter((m) => {
@@ -211,7 +234,15 @@ function uniqueFilteredFilms() {
 function tableCountParts() {
   const unique = uniqueFilteredFilms();
   const filmCount = unique.length;
-  const diaryEntries = unique.reduce((count, movie) => count + getLoggedWatchHistory(movie).length, 0);
+  const monthFilter = state.activeChartFilters.watched_month;
+  const diaryEntries = unique.reduce((count, movie) => {
+    const watches = getLoggedWatchHistory(movie);
+    if (!monthFilter) return count + watches.length;
+    return count + watches.filter((w) => {
+      const d = getMovieHeatmapDate(w);
+      return d && monthHeatmapKey(d.getFullYear(), d.getMonth()) === monthFilter.value;
+    }).length;
+  }, 0);
   const filmWord = 'film' + (filmCount !== 1 ? 's' : '');
   const activeChartLabel = chartFilterLabel();
   const main = filmCount + ' ' + filmWord + (activeChartLabel ? ' matching ' + activeChartLabel : '');
@@ -341,9 +372,11 @@ export function renderTable() {
   const el = getElements();
   if (!el.tableBody || !el.tableEmpty || !el.filmsTable) return;
 
-  const total = state.filtered.length;
+  _currentRows = isFilterActive() ? collapseToLatestPerFilm(state.filtered) : state.filtered;
+  const rows = _currentRows;
+  const total = rows.length;
   const start = (state.currentPage - 1) * state.pageSize;
-  const page = state.filtered.slice(start, start + state.pageSize);
+  const page = rows.slice(start, start + state.pageSize);
 
   renderTableCount();
 
@@ -370,5 +403,5 @@ export function renderTable() {
 export function initTable({ openDetail }) {
   onOpenDetail = openDetail;
   const { tableBody } = getElements();
-  if (tableBody) attachRowHandlers(tableBody, (idx) => state.filtered[idx]);
+  if (tableBody) attachRowHandlers(tableBody, (idx) => _currentRows[idx]);
 }

@@ -5,6 +5,7 @@ import {
   decadeStart,
   exactScoreLabels,
   getMovieReleaseYear,
+  latestByFilmMap,
   scoreBinLabels,
   scoreBucketRange,
   scoreToBucket,
@@ -161,7 +162,7 @@ function getScoreChartState(movies) {
 
 function buildScoreChart() {
   const el = getElements();
-  const scoredMovies = state.allMovies.filter((movie) => movie.score !== null);
+  const scoredMovies = [...latestByFilmMap(state.allMovies).values()].filter((movie) => movie.score !== null);
   const chartState = getScoreChartState(scoredMovies);
 
   if (el.scoreChartTitle) el.scoreChartTitle.textContent = chartState.title;
@@ -228,7 +229,7 @@ function buildRatingChart() {
     counts[rating] = 0;
   });
 
-  state.allMovies.forEach((movie) => {
+  latestByFilmMap(state.allMovies).forEach((movie) => {
     if (movie.rating === null) return;
     const rating = Math.round(movie.rating * 2) / 2;
     if (counts[rating] !== undefined) counts[rating]++;

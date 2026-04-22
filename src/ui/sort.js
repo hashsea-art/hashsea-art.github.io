@@ -132,10 +132,6 @@ export function initSort({ onChange }) {
   onSortChange = onChange;
 
   getSortHeaders().forEach((th) => {
-    th.title =
-      th.dataset.col === 'review_link'
-        ? 'Click to group reviewed vs not reviewed, then flip the groups, then reset to watched latest. Watched date breaks ties by default.'
-        : 'Click to sort descending, then ascending, then reset to watched latest. Shift-click to add another sort.';
     th.addEventListener('click', (event) => {
       const col = th.dataset.col;
       if (!col) return;

@@ -1,7 +1,7 @@
 // Search, chart-filter, and page-size interactions for narrowing the film list.
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, MONTH_LABELS, RATING_STEPS } from '../constants.js';
 import { state } from '../state.js';
-import { getMovieHeatmapDate, getMovieReleaseYear, monthHeatmapKey } from '../movies.js';
+import { getMovieHeatmapDate, getMovieReleaseYear, latestByFilmMap, monthHeatmapKey } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
 import { renderMonthHeatmap } from './heatmap.js';
 import { applySort } from './sort.js';
@@ -182,13 +182,22 @@ function matchesSearch(movie, raw) {
   return titleHit || notesHit || yearHit || scoreHit;
 }
 
+let _latestByFilmMap = null;
+
 function matchesChartFilter(movie) {
   const filters = Object.values(state.activeChartFilters);
   if (!filters.length) return true;
 
+  const key = `${movie.movie}|${movie.year}`;
   return filters.every((filter) => {
-    if (filter.type === 'score') return movie.score !== null && Math.round(movie.score) === filter.value;
-    if (filter.type === 'rating') return movie.rating !== null && Math.abs(movie.rating - filter.value) < 1e-6;
+    if (filter.type === 'score') {
+      const latest = _latestByFilmMap && _latestByFilmMap.get(key);
+      return latest && latest.score !== null && Math.round(latest.score) === filter.value;
+    }
+    if (filter.type === 'rating') {
+      const latest = _latestByFilmMap && _latestByFilmMap.get(key);
+      return latest && latest.rating !== null && Math.abs(latest.rating - filter.value) < 1e-6;
+    }
     if (filter.type === 'release_year') return getMovieReleaseYear(movie) === filter.value;
     if (filter.type === 'watched_month') {
       const date = getMovieHeatmapDate(movie);
@@ -362,6 +371,8 @@ export function syncSearchUi() {
 }
 
 export function applyFilter() {
+  _latestByFilmMap = latestByFilmMap(state.allMovies);
+
   state.filtered = state.allMovies.filter((movie) => {
     const committedMatch = state.committedSearchTerms.every((term) => matchesSearch(movie, term));
     return committedMatch && matchesChartFilter(movie);
