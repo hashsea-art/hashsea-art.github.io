@@ -486,9 +486,11 @@ select:focus-visible {
 .stat-card--interactive {
   cursor: pointer;
 }
-.stat-card--interactive:hover {
-  background: linear-gradient(180deg, rgba(23, 30, 39, 0.98) 0%, rgba(16, 22, 29, 0.98) 100%);
-  border-color: #e8622a;
+@media (hover: hover) {
+  .stat-card--interactive:hover {
+    background: linear-gradient(180deg, rgba(23, 30, 39, 0.98) 0%, rgba(16, 22, 29, 0.98) 100%);
+    border-color: #e8622a;
+  }
 }
 .stat-card--interactive:focus-visible {
   outline: none;

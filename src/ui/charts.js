@@ -369,7 +369,7 @@ function getWatchPeriodChartState(movies) {
 
 function buildWatchPeriodChart() {
   const el = getElements();
-  const datedMovies = state.allMovies.filter((movie) => getMovieReleaseYear(movie) !== null);
+  const datedMovies = [...latestByFilmMap(state.allMovies).values()].filter((movie) => getMovieReleaseYear(movie) !== null);
   const chartState = getWatchPeriodChartState(datedMovies);
 
   if (el.watchPeriodChartTitle) el.watchPeriodChartTitle.textContent = chartState.title;
