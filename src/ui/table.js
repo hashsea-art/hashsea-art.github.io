@@ -407,8 +407,10 @@ function initScrollHint() {
   if (!outer) return;
 
   const update = () => {
-    const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 2;
+    const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 8;
+    const hasScrolled = wrap.scrollLeft > 8;
     outer.classList.toggle('scroll-end', atEnd);
+    outer.classList.toggle('scroll-started', !atEnd && hasScrolled);
   };
 
   wrap.addEventListener('scroll', update, { passive: true });

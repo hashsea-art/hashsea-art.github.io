@@ -2321,11 +2321,15 @@ body.scoring-guide-open .site-footer {
     top: 0;
     right: 0;
     bottom: 0;
-    width: 3.5rem;
-    background: linear-gradient(to left, rgba(12, 15, 19, 0.88) 0%, transparent 100%);
+    width: 5rem;
+    background: linear-gradient(to left, rgba(12, 15, 19, 0.92) 0%, transparent 100%);
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.25s ease, width 0.25s ease;
+  }
+  .table-scroll-wrap.scroll-started::after {
+    width: 2rem;
+    opacity: 0.4;
   }
   .table-scroll-wrap.scroll-end::after {
     opacity: 0;
