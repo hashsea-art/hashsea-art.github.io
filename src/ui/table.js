@@ -400,8 +400,27 @@ export function renderTable() {
   renderPagination(total);
 }
 
+function initScrollHint() {
+  const wrap = document.getElementById('tableWrap');
+  if (!wrap) return;
+  const outer = wrap.parentElement;
+  if (!outer) return;
+
+  const update = () => {
+    const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 2;
+    outer.classList.toggle('scroll-end', atEnd);
+  };
+
+  wrap.addEventListener('scroll', update, { passive: true });
+
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(update).observe(wrap);
+  }
+}
+
 export function initTable({ openDetail }) {
   onOpenDetail = openDetail;
   const { tableBody } = getElements();
   if (tableBody) attachRowHandlers(tableBody, (idx) => _currentRows[idx]);
+  initScrollHint();
 }
