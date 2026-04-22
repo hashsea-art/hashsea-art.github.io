@@ -76,7 +76,7 @@ export function initInfoHub() {
       if (!panelId) return;
 
       const isOpen = tab.getAttribute('aria-expanded') === 'true';
-      if (isOpen) return;
+      if (isOpen) { closeInfoPanels(); return; }
 
       openInfoPanel(panelId);
     });

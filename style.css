@@ -1949,6 +1949,7 @@ td {
 body.scoring-guide-open .dashboard,
 body.scoring-guide-open .site-footer {
   opacity: 0.1;
+  pointer-events: none;
 }
 .site-footer-inner {
   max-width: var(--max-w);
