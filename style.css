@@ -1674,6 +1674,9 @@ td {
   opacity: 0.76;
   white-space: nowrap;
 }
+.table-meta-row {
+  display: contents;
+}
 .rewatch-cell {
   padding-left: 0.35rem;
   padding-right: 0.35rem;
@@ -2315,8 +2318,14 @@ body.scoring-guide-open .site-footer {
   .active-filters {
     margin-bottom: 0.5rem;
   }
-  .table-hint {
+  .table-meta-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     margin: 0.2rem 0 0.5rem;
+  }
+  .table-hint {
+    margin: 0;
     text-align: left;
     font-size: 0.58rem;
     white-space: normal;
@@ -2329,7 +2338,6 @@ body.scoring-guide-open .site-footer {
   .swipe-hint {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.25em;
     font-size: var(--text-xs);
     font-family: var(--font-body);
@@ -2337,7 +2345,7 @@ body.scoring-guide-open .site-footer {
     letter-spacing: 0.02em;
     line-height: 1.2;
     opacity: 0.76;
-    margin: 0.35rem 0 0;
+    margin: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
     user-select: none;
@@ -2560,11 +2568,6 @@ body.scoring-guide-open .site-footer {
   }
   .page-size-select {
     min-width: 3.1rem;
-  }
-  .table-hint {
-    font-size: 0.58rem;
-    margin-top: 0.22rem;
-    margin-bottom: 0.38rem;
   }
   .col-date {
     width: 92px;
