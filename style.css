@@ -32,6 +32,9 @@
   --font-numeric: "Manrope", Arial, sans-serif;
   --radius: 8px;
   --radius-lg: 14px;
+  --text-xs: 0.62rem;
+  --text-sm: 0.75rem;
+  --text-base: 1rem;
   --max-w: 1200px;
   --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
   --shadow-lg: 0 22px 60px rgba(0, 0, 0, 0.42);
@@ -859,6 +862,9 @@ select:focus-visible {
   overflow-y: hidden;
   padding: 0.14rem 0.08rem 0.22rem;
 }
+.month-heatmap-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
 .month-heatmap-scroll--tall {
   max-height: calc(
     var(--heatmap-header-height) +
@@ -869,7 +875,11 @@ select:focus-visible {
   overflow-y: auto;
   padding-right: 0.5rem;
   padding-bottom: 0;
-  scrollbar-gutter: stable;
+}
+@media (hover: hover) {
+  .month-heatmap-scroll--tall {
+    scrollbar-gutter: stable;
+  }
 }
 .month-heatmap-grid {
   display: grid;
@@ -1657,7 +1667,7 @@ td {
   margin: 0.35rem 0 0.55rem;
   text-align: right;
   color: var(--ink-3);
-  font-size: 0.62rem;
+  font-size: var(--text-xs);
   font-family: var(--font-body);
   line-height: 1.2;
   letter-spacing: 0.02em;
@@ -2204,6 +2214,10 @@ body.scoring-guide-open .site-footer {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+.swipe-hint {
+  display: none;
+}
+
 @media (max-width: 768px) {
   body {
     background-attachment: scroll, scroll;
@@ -2312,27 +2326,28 @@ body.scoring-guide-open .site-footer {
     overflow-y: hidden;
     scrollbar-gutter: stable both-edges;
   }
-  .table-scroll-wrap {
-    position: relative;
-  }
-  .table-scroll-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 5rem;
-    background: linear-gradient(to left, rgba(12, 15, 19, 0.92) 0%, transparent 100%);
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  .swipe-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
+    font-size: var(--text-xs);
+    font-family: var(--font-body);
+    color: var(--ink-3);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    opacity: 0.76;
+    margin: 0.35rem 0 0;
+    transition: opacity 0.4s ease;
     pointer-events: none;
-    transition: opacity 0.25s ease, width 0.25s ease;
+    user-select: none;
   }
-  .table-scroll-wrap.scroll-started::after {
-    width: 2rem;
-    opacity: 0.4;
+  .swipe-arrow {
+    letter-spacing: 0;
   }
-  .table-scroll-wrap.scroll-end::after {
+  .swipe-hint.hidden {
     opacity: 0;
+    transition: opacity 0.6s ease;
   }
   .films-table {
     width: max-content;

@@ -402,22 +402,15 @@ export function renderTable() {
 
 function initScrollHint() {
   const wrap = document.getElementById('tableWrap');
-  if (!wrap) return;
-  const outer = wrap.parentElement;
-  if (!outer) return;
+  const hint = document.getElementById('swipeHint');
+  if (!wrap || !hint) return;
 
-  const update = () => {
-    const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 8;
-    const hasScrolled = wrap.scrollLeft > 8;
-    outer.classList.toggle('scroll-end', atEnd);
-    outer.classList.toggle('scroll-started', !atEnd && hasScrolled);
+  const dismiss = () => {
+    hint.classList.add('hidden');
+    wrap.removeEventListener('scroll', dismiss);
   };
 
-  wrap.addEventListener('scroll', update, { passive: true });
-
-  if (typeof ResizeObserver !== 'undefined') {
-    new ResizeObserver(update).observe(wrap);
-  }
+  wrap.addEventListener('scroll', dismiss, { passive: true, once: true });
 }
 
 export function initTable({ openDetail }) {
