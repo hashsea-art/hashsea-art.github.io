@@ -2333,7 +2333,7 @@ body.scoring-guide-open .site-footer {
   .table-wrap {
     overflow-x: auto;
     overflow-y: hidden;
-    scrollbar-gutter: stable both-edges;
+    scrollbar-gutter: stable;
   }
   .swipe-hint {
     display: flex;
