@@ -29,7 +29,6 @@
   --font-body: "Manrope", Arial, sans-serif;
   --font-review: "Source Serif 4", Georgia, serif;
   --font-mono: "Space Mono", "Courier New", monospace;
-  --font-numeric: "Manrope", Arial, sans-serif;
   --radius: 8px;
   --radius-lg: 14px;
   --text-xs: 0.62rem;
@@ -662,7 +661,7 @@ select:focus-visible {
   --guide-pill-rim: rgba(217, 141, 152, 0.045);
 }
 .score-guide-range {
-  font-family: var(--font-numeric);
+  font-family: var(--font-body);
   font-size: 0.74rem;
   font-weight: 700;
   color: #ffffff;
@@ -928,7 +927,7 @@ select:focus-visible {
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.025);
   color: var(--ink-2);
-  font-family: var(--font-numeric);
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -1390,7 +1389,6 @@ select:focus-visible {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  -webkit-overflow-scrolling: touch;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 .films-table {
@@ -1789,7 +1787,7 @@ td {
   border: none;
   border-radius: var(--radius-lg);
   color: var(--score-bubble-fg, var(--ink-3));
-  font-family: var(--font-numeric);
+  font-family: var(--font-body);
   font-size: 0.76rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums lining-nums;
@@ -1811,7 +1809,7 @@ td {
   --score-bubble-fg: var(--ink-3);
 }
 .delta-wrap {
-  font-family: var(--font-numeric);
+  font-family: var(--font-body);
   font-size: 0.76rem;
   font-weight: 600;
   color: var(--ink-3);
@@ -1875,7 +1873,7 @@ td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.14s;
+  transition: background 0.14s, border-color 0.14s, color 0.14s, box-shadow 0.14s;
 }
 .pg-btn:hover:not(:disabled):not(.active) {
   background: rgba(255, 255, 255, 0.06);
@@ -1944,7 +1942,7 @@ td {
   font-size: 0.7rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.14s;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
 }
 .pg-jump-btn:hover,
 .pg-jump-btn:focus-visible {
@@ -2040,7 +2038,6 @@ body.scoring-guide-open .site-footer {
   box-shadow: var(--shadow-lg);
   z-index: 300;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -2166,7 +2163,7 @@ body.scoring-guide-open .site-footer {
   color: var(--ink-3);
 }
 .score-big {
-  font-family: var(--font-numeric);
+  font-family: var(--font-body);
   font-size: 3.5rem;
   line-height: 1;
   font-weight: 700;

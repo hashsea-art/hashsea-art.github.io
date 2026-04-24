@@ -4,9 +4,6 @@ export function formatTenths(value) {
   return fixed.endsWith('.0') ? fixed.slice(0, -2) : fixed;
 }
 
-export function formatPct(value) {
-  return formatTenths(value);
-}
 
 export function fmtDate(value) {
   if (!value) return '\u2014';

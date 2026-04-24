@@ -154,7 +154,7 @@ export function openDetail(movie) {
   el.detailClose?.focus();
 }
 
-export function closeDetail() {
+function closeDetail() {
   const el = getElements();
   if (!el.detailPanel) return;
 

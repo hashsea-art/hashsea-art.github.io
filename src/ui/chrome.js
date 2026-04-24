@@ -1,4 +1,6 @@
 // Page-level UI behavior for static chrome like the info hub and back-to-top link.
+import { getScrollBehavior } from '../utils/dom.js';
+
 let ignoreOutsideCloseForCurrentTick = false;
 
 function getElements() {
@@ -111,10 +113,7 @@ export function initBackToTopLink() {
 
   el.backToTopLink.addEventListener('click', (event) => {
     event.preventDefault();
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const behavior = prefersReducedMotion ? 'auto' : 'smooth';
-
-    window.scrollTo({ top: 0, behavior });
+    window.scrollTo({ top: 0, behavior: getScrollBehavior() });
 
     const focusTop = () => {
       if (!el.topTarget) return;

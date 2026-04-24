@@ -10,7 +10,7 @@ import {
   scoreBucketRange,
   scoreToBucket,
 } from '../movies.js';
-import { formatPct } from '../utils/format.js';
+import { formatTenths } from '../utils/format.js';
 
 let scoreChart = null;
 let ratingChart = null;
@@ -109,7 +109,7 @@ function tooltipCfg() {
         const count = context.parsed.y ?? context.parsed;
         const values = Array.isArray(context.dataset?.data) ? context.dataset.data : [];
         const total = values.reduce((sum, value) => sum + (Number(value) || 0), 0);
-        const pct = total > 0 ? formatPct((count / total) * 100) : '0';
+        const pct = total > 0 ? formatTenths((count / total) * 100) : '0';
         return count + ' film' + (count === 1 ? '' : 's') + ' \u00b7 ' + pct + '%';
       },
     },

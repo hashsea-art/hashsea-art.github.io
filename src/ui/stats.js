@@ -2,6 +2,7 @@
 import { state } from '../state.js';
 import { getWatchHistory } from '../movies.js';
 import { openInfoPanel } from './chrome.js';
+import { getScrollBehavior } from '../utils/dom.js';
 
 function getElements() {
   return {
@@ -24,10 +25,6 @@ function openExternalStatUrl(url) {
   if (!url) return;
   const nextWindow = window.open(url, '_blank', 'noopener,noreferrer');
   if (nextWindow) nextWindow.opener = null;
-}
-
-function getScrollBehavior() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 }
 
 function scrollToFilmsTable() {
