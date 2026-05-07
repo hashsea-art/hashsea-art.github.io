@@ -688,6 +688,64 @@ select:focus-visible {
   font-size: 0.7rem;
   line-height: 1;
 }
+.score-guide-paragraph + .score-guide-question {
+  margin-top: 1.2rem;
+}
+#aboutMePanel .score-guide-paragraph,
+#aboutDiaryPanel .score-guide-paragraph {
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  word-spacing: 0;
+}
+#aboutMePanel {
+  position: relative;
+}
+.about-date-chip {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  padding: 0.16rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.about-text-link {
+  color: #6fd2ff;
+  text-decoration: none;
+  transition: color 0.13s;
+}
+.about-text-link:hover,
+.about-text-link:focus-visible {
+  color: #a8e4ff;
+}
+.about-section-link {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  padding: 0.14rem 0.52rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-decoration: none;
+  margin: 0 0.15rem;
+  transition: color 0.13s, border-color 0.13s;
+}
+.about-section-link:hover,
+.about-section-link:focus-visible {
+  color: var(--ink);
+  border-color: rgba(255, 255, 255, 0.24);
+}
 /* Charts */
 .charts-grid {
   display: grid;
