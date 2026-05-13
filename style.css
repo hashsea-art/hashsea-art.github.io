@@ -307,16 +307,15 @@ select:focus-visible {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.7rem;
+  gap: 0;
   min-height: 12.1rem;
-  padding: 1rem 1rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.1rem 1.15rem 1.2rem;
+  border: 1px solid var(--border);
   border-radius: 16px;
-  background:
-    linear-gradient(180deg, rgba(23, 29, 37, 0.96) 0%, rgba(16, 21, 28, 0.98) 100%);
+  background: var(--bg-elevated-2);
   text-decoration: none;
   color: #dce6f3;
-  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
   overflow: hidden;
 }
 .info-panel-link-top {
@@ -327,8 +326,8 @@ select:focus-visible {
 }
 .info-panel-link:hover,
 .info-panel-link:focus-visible {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: linear-gradient(180deg, rgba(27, 34, 43, 0.98) 0%, rgba(18, 25, 33, 0.98) 100%);
+  border-color: var(--border-strong);
+  background: linear-gradient(180deg, #1d2530 0%, var(--bg-elevated-2) 100%);
   color: #f5f9fd;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14);
 }
@@ -336,23 +335,23 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.8rem;
-  height: 2.8rem;
-  flex: 0 0 2.8rem;
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 3rem;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.06);
   color: #eef8ff;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 .info-panel-link-icon svg {
   display: block;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.9rem;
+  height: 1.9rem;
 }
 .info-panel-link-icon img {
   display: block;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.9rem;
+  height: 1.9rem;
   object-fit: contain;
   border-radius: 4px;
 }
@@ -362,8 +361,11 @@ select:focus-visible {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0;
+  flex: 1;
   width: 100%;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 0.8rem;
+  padding-top: 0.75rem;
 }
 .info-panel-link-head {
   min-width: 0;
@@ -377,17 +379,17 @@ select:focus-visible {
 .info-panel-link-name {
   font-family: var(--font-body);
   font-size: 0.84rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #f1f7fd;
+  color: var(--ink);
   line-height: 1.2;
 }
 .info-panel-link-handle {
   font-family: var(--font-body);
   font-size: 0.72rem;
-  font-weight: 600;
-  color: #9ec6eb;
+  font-weight: 500;
+  color: var(--blue);
   letter-spacing: 0.01em;
   line-height: 1.3;
   white-space: normal;
@@ -397,9 +399,9 @@ select:focus-visible {
 }
 .info-panel-link-note {
   font-size: 0.8rem;
-  line-height: 1.56;
-  color: var(--ink-3);
-  margin-top: 0.7rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-top: 0.5rem;
   max-width: none;
   text-align: left;
 }
@@ -723,12 +725,13 @@ select:focus-visible {
 .about-text-link:focus-visible {
   color: #a8e4ff;
 }
+
 .about-section-link {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
   padding: 0.14rem 0.52rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(111, 210, 255, 0.3);
   border-radius: 6px;
   background: transparent;
   font-family: var(--font-body);
@@ -736,15 +739,15 @@ select:focus-visible {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-2);
+  color: #6fd2ff;
   text-decoration: none;
-  margin: 0 0.15rem;
+  margin: 0 0 0.6rem;
   transition: color 0.13s, border-color 0.13s;
 }
 .about-section-link:hover,
 .about-section-link:focus-visible {
-  color: var(--ink);
-  border-color: rgba(255, 255, 255, 0.24);
+  color: #a8e4ff;
+  border-color: rgba(111, 210, 255, 0.5);
 }
 /* Charts */
 .charts-grid {
@@ -2344,7 +2347,7 @@ body.scoring-guide-open .site-footer {
     gap: 0.72rem;
   }
   .info-panel-link {
-    min-height: 11.2rem;
+    padding: 0.95rem 1rem 1rem;
   }
   .search-bar-wrap {
     align-items: stretch;
@@ -2446,6 +2449,9 @@ body.scoring-guide-open .site-footer {
   .score-guide-question {
     font-size: 0.76rem;
     margin-bottom: 0.42rem;
+  }
+  .about-section-link {
+    padding: 0.38rem 0.6rem;
   }
   .score-guide-scale-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
