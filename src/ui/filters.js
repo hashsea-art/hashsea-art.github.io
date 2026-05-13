@@ -228,7 +228,7 @@ export function chartFilterLabel() {
   return labels.join(' + ');
 }
 
-export function hasActiveChartFilter() {
+function hasActiveChartFilter() {
   return Object.keys(state.activeChartFilters).length > 0;
 }
 

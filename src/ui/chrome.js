@@ -30,7 +30,7 @@ export function closeInfoPanels() {
     panel.classList.remove('open');
   });
   if (panelsWrap) panelsWrap.hidden = true;
-  pageBody.classList.remove('scoring-guide-open');
+  pageBody.classList.remove('info-panel-open');
 }
 
 export function openInfoPanel(panelId, { focusTab = false, preserveOnCurrentEvent = false } = {}) {
@@ -53,9 +53,7 @@ export function openInfoPanel(panelId, { focusTab = false, preserveOnCurrentEven
   tab.setAttribute('aria-expanded', 'true');
   panel.hidden = false;
   panel.classList.add('open');
-  if (panelId === 'scoringGuidePanel') {
-    pageBody.classList.add('scoring-guide-open');
-  }
+  pageBody.classList.add('info-panel-open');
   if (focusTab) {
     try {
       tab.focus({ preventScroll: true });
@@ -113,7 +111,8 @@ export function initBackToTopLink() {
 
   el.backToTopLink.addEventListener('click', (event) => {
     event.preventDefault();
-    window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    const behavior = getScrollBehavior();
+    window.scrollTo({ top: 0, behavior });
 
     const focusTop = () => {
       if (!el.topTarget) return;

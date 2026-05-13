@@ -1,6 +1,6 @@
 // Stats card rendering for the dashboard summary section.
 import { state } from '../state.js';
-import { getWatchHistory } from '../movies.js';
+import { getWatchHistory, uniqueByFilm } from '../movies.js';
 import { openInfoPanel } from './chrome.js';
 import { getScrollBehavior } from '../utils/dom.js';
 
@@ -115,12 +115,7 @@ export function initStats() {
 }
 
 function uniqueAllMovies() {
-  const seen = new Set();
-  return state.allMovies.filter((m) => {
-    if (seen.has(m.watch_history)) return false;
-    seen.add(m.watch_history);
-    return true;
-  });
+  return uniqueByFilm(state.allMovies);
 }
 
 export function renderStats() {

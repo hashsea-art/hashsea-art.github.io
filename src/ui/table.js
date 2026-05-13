@@ -1,6 +1,6 @@
 // Film table rendering, pagination, and row-level interactions.
 import { state } from '../state.js';
-import { getLoggedWatchHistory, getMovieHeatmapDate, getWatchHistory, monthHeatmapKey, watchTimelineLabel } from '../movies.js';
+import { getLoggedWatchHistory, getMovieHeatmapDate, getWatchHistory, monthHeatmapKey, uniqueByFilm, watchTimelineLabel } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
 import { fmtDate, fmtNotesCell, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
 import { chartFilterLabel } from './filters.js';
@@ -223,12 +223,7 @@ function collapseToLatestPerFilm(movies) {
 }
 
 function uniqueFilteredFilms() {
-  const seen = new Set();
-  return state.filtered.filter((m) => {
-    if (seen.has(m.watch_history)) return false;
-    seen.add(m.watch_history);
-    return true;
-  });
+  return uniqueByFilm(state.filtered);
 }
 
 function tableCountParts() {

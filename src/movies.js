@@ -17,16 +17,6 @@ export function getMovieReleaseYear(movie) {
   return Number.isFinite(year) ? year : null;
 }
 
-export function getWatchEntries(movies) {
-  return movies.flatMap((movie) =>
-    getWatchHistory(movie).map((watch) => ({
-      rating: watch.rating ?? null,
-      score: watch.score ?? null,
-      date_watched: watch.date_watched ?? '',
-    }))
-  );
-}
-
 export function scoreToBucket(score) {
   const value = Number(score);
   if (!Number.isFinite(value) || value < 0 || value > 100) return null;
@@ -86,4 +76,13 @@ export function latestByFilmMap(movies) {
     if (!existing || movie.date_watched > existing.date_watched) map.set(key, movie);
   }
   return map;
+}
+
+export function uniqueByFilm(movies) {
+  const seen = new Set();
+  return movies.filter((m) => {
+    if (seen.has(m.watch_history)) return false;
+    seen.add(m.watch_history);
+    return true;
+  });
 }

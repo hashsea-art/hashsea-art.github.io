@@ -572,9 +572,6 @@ select:focus-visible {
   word-spacing: 0.03em;
   width: 100%;
 }
-.score-guide-emphasis {
-  color: inherit;
-}
 .score-guide-paragraph + .score-guide-paragraph {
   margin-top: 0.92rem;
 }
@@ -1615,11 +1612,6 @@ th.sortable:hover {
   padding-left: 0.72rem;
   padding-right: 0.72rem;
 }
-.films-table th.col-year,
-.films-table td:nth-child(3) {
-  padding-left: 0.72rem;
-  padding-right: 0.72rem;
-}
 .films-table th:first-child {
   width: 31%;
 }
@@ -2018,8 +2010,8 @@ td {
   padding: 0 1.5rem 2.2rem;
   transition: opacity 0.18s ease;
 }
-body.scoring-guide-open .dashboard,
-body.scoring-guide-open .site-footer {
+body.info-panel-open .dashboard,
+body.info-panel-open .site-footer {
   opacity: 0.1;
   pointer-events: none;
 }
@@ -2281,7 +2273,7 @@ body.scoring-guide-open .site-footer {
 
 @media (max-width: 768px) {
   body {
-    background-attachment: scroll, scroll;
+    background-attachment: scroll;
   }
   .masthead {
     padding-top: 2.2rem;
@@ -2313,10 +2305,16 @@ body.scoring-guide-open .site-footer {
   .info-tab {
     font-size: 0.73rem;
     letter-spacing: 0.07em;
-    padding: 0.76rem 0.45rem 0.68rem;
+    line-height: 1;
+    padding: 0.56rem 0.45rem 0.52rem;
   }
   .info-panel-content {
     padding: 0.95rem 0.95rem 1rem;
+  }
+  .about-date-chip {
+    position: static;
+    display: inline-block;
+    margin-top: 0.75rem;
   }
   .info-panel-text {
     font-size: 0.86rem;
@@ -2519,9 +2517,6 @@ body.scoring-guide-open .site-footer {
     max-width: 180px;
     font-size: 0.96rem;
   }
-  .pg-jump {
-    margin-left: 0;
-  }
   .detail-panel {
     width: 100vw;
     border-left: none;
@@ -2580,10 +2575,6 @@ body.scoring-guide-open .site-footer {
     margin: 2rem 0 1.1rem;
     font-size: 0.8rem;
     letter-spacing: 0.13em;
-  }
-  .section-divider-intro {
-    margin-top: 0;
-    margin-bottom: 2.1rem;
   }
   .info-panel-links {
     grid-template-columns: 1fr;
@@ -2695,9 +2686,6 @@ body.scoring-guide-open .site-footer {
   }
   .detail-block {
     margin-bottom: 1.4rem;
-  }
-  .detail-block-label {
-    margin-bottom: 0.6rem;
   }
   .detail-review-links {
     gap: 0.45rem;
