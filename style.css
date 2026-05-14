@@ -2314,6 +2314,7 @@ body.info-panel-open .site-footer {
   .about-date-chip {
     position: static;
     display: inline-block;
+    width: fit-content;
     margin-top: 0.75rem;
   }
   .info-panel-text {
