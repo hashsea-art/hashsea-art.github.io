@@ -596,6 +596,25 @@ select:focus-visible {
   line-height: 1.35;
   text-align: left;
 }
+#aboutDiaryPanel a.score-guide-question {
+  display: block;
+  text-decoration: none;
+}
+#aboutDiaryPanel a.score-guide-question::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 0.45em;
+  transition: transform 0.18s;
+}
+#aboutDiaryPanel a.score-guide-question:hover,
+#aboutDiaryPanel a.score-guide-question:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+#aboutDiaryPanel a.score-guide-question:hover::after,
+#aboutDiaryPanel a.score-guide-question:focus-visible::after {
+  transform: translateX(4px);
+}
 .score-guide-scale {
   padding: 0.62rem 0 1.08rem;
 }
