@@ -159,8 +159,6 @@ function matchesSearch(movie, raw) {
   if (!query) return true;
 
   const titleHit = movie.movie.toLowerCase().includes(query.toLowerCase());
-  const notesHit =
-    movie.notes && typeof movie.notes === 'string' && movie.notes.toLowerCase().includes(query.toLowerCase());
 
   const trimmed = query.trim();
   const asInt = parseInt(trimmed, 10);
@@ -179,7 +177,7 @@ function matchesSearch(movie, raw) {
     }
   }
 
-  return titleHit || notesHit || yearHit || scoreHit;
+  return titleHit || yearHit || scoreHit;
 }
 
 let _latestByFilmMap = null;

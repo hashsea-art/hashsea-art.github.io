@@ -1526,19 +1526,6 @@ select:focus-visible {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.notes-cell-content {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-width: 0;
-  max-width: 100%;
-}
-.notes-preview {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .notes-review-link {
   flex: 0 0 auto;
   display: inline-flex;
@@ -1565,12 +1552,6 @@ select:focus-visible {
   background: var(--badge-blue-hover-bg);
   border-color: var(--badge-blue-hover-border);
   color: var(--badge-blue-hover-text);
-}
-.detail-notes {
-  font-size: 0.95rem;
-  color: var(--ink-2);
-  line-height: 1.55;
-  white-space: pre-wrap;
 }
 .detail-review-links {
   display: flex;

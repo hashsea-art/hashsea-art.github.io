@@ -32,7 +32,6 @@ export const COL_ALIASES = {
   score: ['score', 'my_score', 'points', 'grade', 'numeric_score'],
   date_watched: ['date_watched', 'watched_date', 'watched', 'watch_date', 'date', 'viewed_on'],
   previous_score: ['previous_score', 'prev_score', 'old_score', 'previous', 'last_score'],
-  notes: ['notes', 'note', 'comment', 'memo'],
   review_link: ['review_link', 'review_url', 'review_uri', 'letterboxd_uri', 'uri'],
 };
 

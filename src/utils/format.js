@@ -14,12 +14,7 @@ export function fmtDate(value) {
   return String(value);
 }
 
-export function fmtNotesCell(value) {
-  if (!value || !String(value).trim()) return '\u2014';
-  const note = String(value).trim();
-  if (note.length > 48) return note.slice(0, 45) + '\u2026';
-  return note;
-}
+
 
 export function fmtScore(score) {
   if (score === null) return '\u2014';

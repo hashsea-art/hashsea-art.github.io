@@ -71,10 +71,6 @@ function sortKey(movie, col) {
     return Number.isFinite(time) ? time : null;
   }
 
-  if (col === 'notes') {
-    return value === '' || value == null ? null : String(value).toLowerCase();
-  }
-
   if (col === 'review_link') {
     return movie.review_link ? 1 : 0;
   }

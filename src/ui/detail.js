@@ -15,7 +15,6 @@ function getElements() {
     detailRatingBlock: document.getElementById('detailRatingBlock'),
     detailStars: document.getElementById('detailStars'),
     detailNotesBlock: document.getElementById('detailNotesBlock'),
-    detailNotes: document.getElementById('detailNotes'),
     detailReviewLinks: document.getElementById('detailReviewLinks'),
   };
 }
@@ -133,18 +132,9 @@ export function openDetail(movie) {
     }
   }
 
-  if (el.detailNotesBlock && el.detailNotes && el.detailReviewLinks) {
-    const hasNotes = !!(movie.notes && String(movie.notes).trim());
+  if (el.detailNotesBlock && el.detailReviewLinks) {
     const hasReviews = renderDetailReviewLinks(movie, el.detailReviewLinks);
-    if (hasNotes || hasReviews) {
-      el.detailNotesBlock.hidden = false;
-      el.detailNotes.hidden = !hasNotes;
-      el.detailNotes.textContent = hasNotes ? String(movie.notes).trim() : '';
-    } else {
-      el.detailNotesBlock.hidden = true;
-      el.detailNotes.hidden = true;
-      el.detailNotes.textContent = '';
-    }
+    el.detailNotesBlock.hidden = !hasReviews;
   }
 
   el.detailPanel.classList.add('open');

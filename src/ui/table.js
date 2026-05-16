@@ -2,7 +2,7 @@
 import { state } from '../state.js';
 import { getLoggedWatchHistory, getMovieHeatmapDate, getWatchHistory, monthHeatmapKey, uniqueByFilm, watchTimelineLabel } from '../movies.js';
 import { makeEl } from '../utils/dom.js';
-import { fmtDate, fmtNotesCell, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
+import { fmtDate, fmtScore, formatTenths, scoreToneClass } from '../utils/format.js';
 import { chartFilterLabel } from './filters.js';
 import { syncSortUI } from './sort.js';
 
@@ -61,24 +61,15 @@ function createScoreContent(score) {
   return makeEl('span', 'score-bubble ' + scoreToneClass(score), fmtScore(score));
 }
 
-function createNotesCellContent(notes, reviewLink) {
-  const noteText = fmtNotesCell(notes);
-  if (!reviewLink) return document.createTextNode(noteText);
-
-  const wrap = makeEl('div', 'notes-cell-content');
-  if (noteText !== '\u2014') {
-    wrap.appendChild(makeEl('span', 'notes-preview', noteText));
-  }
-
+function createReviewCellContent(reviewLink) {
+  if (!reviewLink) return document.createTextNode('—');
   const link = makeEl('a', 'notes-review-link', 'LB Review');
   link.href = reviewLink;
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
   link.addEventListener('click', (event) => event.stopPropagation());
   link.addEventListener('keydown', (event) => event.stopPropagation());
-  wrap.appendChild(link);
-
-  return wrap;
+  return link;
 }
 
 function entryPreviewScore(chronological, entry) {
@@ -175,7 +166,7 @@ function createTableRowElement(movie, idx) {
   tr.appendChild(scoreCell);
 
   const notesCell = makeEl('td', 'notes-cell');
-  notesCell.appendChild(createNotesCellContent(movie.notes, movie.review_link));
+  notesCell.appendChild(createReviewCellContent(movie.review_link));
   tr.appendChild(notesCell);
 
   return tr;

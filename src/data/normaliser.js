@@ -117,7 +117,6 @@ function buildMoviesFromEntries(entries) {
     rewatch: !!entry.rewatch,
     score: entry.score,
     previous_score: entry.previous_score,
-    notes: entry.notes,
     review_link: entry.review_link,
   }));
 
@@ -145,7 +144,6 @@ function buildMoviesFromEntries(entries) {
       has_rewatch: rewatchCount > 0,
       rewatch_count: rewatchCount,
       previous_score: latest.previous_score,
-      notes: latest.notes,
       review_link: latestReviewedWatch ? latestReviewedWatch.review_link : latest.review_link,
       watch_history: watches,
       score_history: scoreHistory,
@@ -164,7 +162,6 @@ function buildMoviesFromEntries(entries) {
       has_rewatch: watch.rewatch,
       rewatch_count: rewatchCount,
       previous_score: watch.previous_score,
-      notes: watch.notes,
       review_link: watch.review_link || '',
       watch_history: watches,
       score_history: scoreHistory,
@@ -186,7 +183,6 @@ export function normaliseRows(rows) {
       score: parseScore(str(row, colMap.score)),
       date_watched: str(row, colMap.date_watched),
       previous_score: parseScore(str(row, colMap.previous_score)),
-      notes: colMap.notes ? str(row, colMap.notes) : '',
       review_link: colMap.review_link ? safeExternalUrl(str(row, colMap.review_link)) : '',
       _idx: idx,
     }))
