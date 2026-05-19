@@ -126,7 +126,7 @@ export function openDetail(movie) {
   if (el.detailRatingBlock && el.detailStars) {
     if (movie.rating !== null) {
       el.detailRatingBlock.hidden = false;
-      el.detailStars.innerHTML = renderStars(movie.rating);
+      el.detailStars.replaceChildren(renderStars(movie.rating));
     } else {
       el.detailRatingBlock.hidden = true;
     }

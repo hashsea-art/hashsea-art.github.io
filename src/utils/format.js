@@ -26,11 +26,17 @@ export function scoreToneClass(score) {
 }
 
 export function renderStars(rating) {
-  let html = '';
+  const frag = document.createDocumentFragment();
   for (let i = 1; i <= 5; i++) {
-    if (rating >= i) html += '<span class="star-full">\u2605</span>';
-    else if (rating >= i - 0.5) html += '<span class="star-half">\u00bd</span>';
-    else html += '<span class="star-empty">\u2606</span>';
+    const span = document.createElement('span');
+    if (rating >= i) { span.className = 'star-full'; span.textContent = '\u2605'; }
+    else if (rating >= i - 0.5) { span.className = 'star-half'; span.textContent = '\u00bd'; }
+    else { span.className = 'star-empty'; span.textContent = '\u2606'; }
+    frag.appendChild(span);
   }
-  return html + '<span class="star-label">' + rating + ' / 5</span>';
+  const label = document.createElement('span');
+  label.className = 'star-label';
+  label.textContent = rating + ' / 5';
+  frag.appendChild(label);
+  return frag;
 }

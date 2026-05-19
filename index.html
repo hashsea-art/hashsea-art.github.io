@@ -5,19 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' https://fonts.googleapis.com; style-src-attr 'none'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://www.serializd.com https://www.reddit.com https://www.redditstatic.com; connect-src 'self'; object-src 'none'; worker-src 'none'; media-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+    content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; font-src 'self'; img-src 'self' data: https://www.reddit.com https://www.serializd.com; connect-src 'self'; object-src 'none'; worker-src 'none'; media-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
   />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Harsh's Film Diary</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600;1,8..60,700&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-    crossorigin="anonymous"
-    referrerpolicy="strict-origin-when-cross-origin"
-  />
+  <link rel="stylesheet" href="./vendor/fonts.css" />
   <link rel="stylesheet" href="./style.css" />
   <script src="./vendor/chart.umd.min.js" defer></script>
   <script type="module" src="./src/main.js"></script>
@@ -70,11 +63,11 @@
                 </div>
                 <div class="score-guide-note">
                   <a href="#" class="score-guide-question">General Musings</a>
-                  <p class="score-guide-paragraph">Fun playground for me. Think pieces, random rants, and hot takes &mdash; not just on a particular film but on broad cinema topics as well. Say, the decline of individual star power in Hollywood has been one of the better things to happen.</p>
+                  <p class="score-guide-paragraph">Fun playground for me. Think pieces, random rants (please stop 3-D <span style="font-family:system-ui,sans-serif">╰（‵□′）╯</span>), and hot takes &mdash; not just on a particular film but on broad cinema topics as well. Say, <em style="font-weight:300">the decline of individual star power in Hollywood has been one of the better things to happen.</em></p>
                 </div>
                 <div class="score-guide-note">
                   <a href="#" class="score-guide-question">Film Timeline</a>
-                  <p class="score-guide-paragraph">A running history of my film reviews and monthly wrap-ups with occasional lists thrown in, like yearly highlights, top 10 Tarantino (oops), etc.</p>
+                  <p class="score-guide-paragraph">A running history of my film reviews and monthly wrap-ups with occasional lists thrown in. I'll try to have fewer routine compilations like <em style="font-weight:300">top 10 Tarantino</em> (oops), and more overlooked stuff like <a href="#" class="about-text-link">music discoveries</a> through film.</p>
                 </div>
               </div>
             </div>
@@ -225,7 +218,7 @@
             <a class="info-panel-link" href="https://reddit.com/u/hashsea" target="_blank" rel="noopener noreferrer" aria-label="Reddit: u/hashsea">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
-                  <img src="https://www.reddit.com/favicon.ico" alt="" />
+                  <img src="https://www.reddit.com/favicon.ico" alt="" referrerpolicy="no-referrer" />
                 </span>
                 <span class="info-panel-link-head">
                   <span class="info-panel-link-name">Reddit</span>
@@ -239,7 +232,7 @@
             <a class="info-panel-link" href="https://www.serializd.com/user/hashsea/profile" target="_blank" rel="noopener noreferrer" aria-label="Serializd: hashsea">
               <span class="info-panel-link-top">
                 <span class="info-panel-link-icon" aria-hidden="true">
-                  <img src="https://www.serializd.com/favicon.ico" alt="" />
+                  <img src="https://www.serializd.com/favicon.ico" alt="" referrerpolicy="no-referrer" />
                 </span>
                 <span class="info-panel-link-head">
                   <span class="info-panel-link-name">Serializd</span>
