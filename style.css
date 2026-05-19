@@ -385,6 +385,9 @@ select:focus-visible {
   color: var(--ink);
   line-height: 1.2;
 }
+.info-panel-link--email .info-panel-link-handle {
+  font-size: 0.65rem;
+}
 .info-panel-link-handle {
   font-family: var(--font-body);
   font-size: 0.72rem;
