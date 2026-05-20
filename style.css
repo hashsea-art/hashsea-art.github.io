@@ -607,6 +607,7 @@ select:focus-visible {
   content: "→";
   display: inline-block;
   margin-left: 0.45em;
+  vertical-align: 0.12em;
   transition: transform 0.18s;
 }
 #aboutDiaryPanel a.score-guide-question:hover,
