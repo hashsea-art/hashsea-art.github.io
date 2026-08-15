@@ -16,7 +16,10 @@ A personal film diary. Tracks films I've watched and serves as a richer stats co
 - `index.html`: page shell, metadata, and static panel content
 - `style.css`: site styles
 - `data/movies.csv`: diary data source
+- `data/metadata/`: generated CSVs (films, rating/score frequency)
+- `scripts/generate_metadata.ps1`: regenerates `data/metadata/`
 - `vendor/chart.umd.min.js`: Chart.js bundle
+- `vendor/fonts.css` + `vendor/fonts/`: self-hosted fonts (Manrope, Oswald, Source Serif 4, Space Mono)
 - `src/main.js`: app entrypoint and top-level wiring
 - `src/state.js`: shared app state
 - `src/constants.js`: shared constants and column aliases
